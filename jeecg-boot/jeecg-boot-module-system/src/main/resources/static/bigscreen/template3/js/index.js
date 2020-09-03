@@ -1,7 +1,33 @@
 /**
  * Created by Administrator on 2017/5/17.
  */
-
+var buyTimeUpdatex=['1', '2', '3', '4', '5', '6']
+var buyTimeUpdatey=[120, 132, 101, 146, 199, 230]
+$(document).ready(function(){
+    // 第二个页面websocket连接与收数据部分
+    console.log('建立连接');
+    var websocket = new WebSocket("ws://127.0.0.1:8990/ws");
+    websocket.onopen = function(e){
+        console.log('完成注册');
+        var msg = {
+            'content': '创建连接',
+            'sendTime': (new Date()).getTime(),
+            'spreadType': 'INITIAL',
+            'groupId': 'group0004',
+            'clientId': 'client0001',
+            'sendClientId': 'client0002'
+        }
+        websocket.send(JSON.stringify(msg))
+    }
+    websocket.onmessage = function(e){
+        console.log(e.data)
+        // 把接下来的数据根据分类绑定到不同的echarts上即可
+        // 提供动态更新echarts的方式：
+        buyTimeUpdatex.push('7')
+        buyTimeUpdatey.push(140)
+        buyTimeUpdater(buyTimeUpdatex,buyTimeUpdatey);
+    }
+})
 $(function(){
     // index();
     $(".index_nav ul li").each(function(index){
@@ -1615,11 +1641,17 @@ function manage(){
         myChart.setOption(option);
     });
 }
-
+var buyTimeUpdater
+//['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12','13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24']
+//[120, 132, 101, 146, 199, 230, 210, 230, 240, 256, 278, 300,120, 132, 101, 146, 199, 230, 210, 230, 240, 256, 278, 300]
 function yingXiao(){
 // 营销分析
 // 24小时购买时间分析
-    $(function(){
+    $(buyTimeUpdater=function(xData,yData){
+        if(typeof(arguments[1])=="undefined"){
+            xData=buyTimeUpdatex
+            yData=buyTimeUpdatey
+        }
         var myChart = echarts.init($("#buyTime")[0]);
         var option = {
             tooltip: {   //提示框，鼠标悬浮交互时的信息提示
@@ -1644,7 +1676,7 @@ function yingXiao(){
                 {
                     type: 'category',
                     boundaryGap: false,
-                    data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12','13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24'],
+                    data: xData,
                     splitLine: {
                         show: false
                     },
@@ -1678,7 +1710,7 @@ function yingXiao(){
                     name: '',
                     type: 'line',
                     stack: '24小时购买时间',
-                    data: [120, 132, 101, 146, 199, 230, 210, 230, 240, 256, 278, 300,120, 132, 101, 146, 199, 230, 210, 230, 240, 256, 278, 300],
+                    data: yData,
                     itemStyle: {
                         normal: {
                             color: '#02bcbc'
@@ -1687,7 +1719,6 @@ function yingXiao(){
                 }
             ]
         };
-
         myChart.setOption(option);
     });
 // 套餐类型分析

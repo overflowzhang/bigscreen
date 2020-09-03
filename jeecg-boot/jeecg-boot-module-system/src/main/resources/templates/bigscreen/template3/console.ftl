@@ -1534,6 +1534,27 @@
 <script src="${base}/bigscreen/template3/js/artDialog/artDialog.js"></script>
 <script src="${base}/bigscreen/template3/js/artDialog/plugins/iframeTools.source.js"></script>
 <script>
+    // websocket连接与收数据部分
+    $(document).ready(function(){
+        console.log('建立连接');
+        var websocket = new WebSocket("ws://127.0.0.1:8990/ws");
+        websocket.onopen = function(e){
+            console.log('完成注册');
+            var msg = {
+                'content': '创建连接',
+                'sendTime': (new Date()).getTime(),
+                'spreadType': 'INITIAL',
+                'groupId': 'group0003',
+                'clientId': 'client0001',
+                'sendClientId': 'client0001'
+            }
+            websocket.send(JSON.stringify(msg))
+        }
+        websocket.onmessage = function(e){
+            console.log(e.data)
+            // 把接下来的数据根据分类绑定到不同的组件(第一个页面 其他五个echarts组成的页面需要在index.js里去接收)
+        }
+    })
     var number;
     $(function() {
         if (window.screen.height <= 768) {
