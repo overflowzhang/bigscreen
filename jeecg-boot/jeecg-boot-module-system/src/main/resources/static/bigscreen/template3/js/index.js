@@ -1,11 +1,11 @@
 /**
  * Created by Administrator on 2017/5/17.
  */
-var buyTimeUpdatex=['1', '2', '3', '4', '5', '6']
-var buyTimeUpdatey=[120, 132, 101, 146, 199, 230]
+var buyTimeUpdatex=['1', '2', '3', '4', '5', '6', '7']
+var buyTimeUpdatey=[120, 132, 101, 146, 199, 230, 150]
 $(document).ready(function(){
     // 第二个页面websocket连接与收数据部分
-    console.log('建立连接');
+    console.log('建立连接2...');
     var websocket = new WebSocket("ws://127.0.0.1:8990/ws");
     websocket.onopen = function(e){
         console.log('完成注册');
@@ -23,10 +23,51 @@ $(document).ready(function(){
         console.log(e.data)
         // 把接下来的数据根据分类绑定到不同的echarts上即可
         // 提供动态更新echarts的方式：
-        buyTimeUpdatex.push('7')
-        buyTimeUpdatey.push(140)
+        // 将 string 转化为 JSON
+        var data = JSON.parse(e.data)
+        // 巡检工单趋势 echarts
+        var content1 = data['content1']
+        buyTimeUpdatey = content1['data']
         buyTimeUpdater(buyTimeUpdatex,buyTimeUpdatey);
+
+        // 故障因素分析 echarts
+        var content2 = data['content2']
+        failureFactor(content2)
+
+        // 故障类型分析 echarts
+        var content3 = data['content3']
+        faultType(content3)
+
+        // 工单修复数 echarts
+        var content4 = data['content4']
+        orderRepair(content4)
+
+        // 维修工单趋势 echarts
+        var content5 = data['content5']
+        repairOrder(content5['data'])
+
+        // 气候与工单量分析 echarts
+        var content6 = data['content6']
+        climateOrder(content6)
+
+        // 工单完成量与工程师分析 echarts
+        var content7 = data['content7']
+        orderEngineer(content7)
+
+        // 巡检工单行业分析 echarts
+        var content8 = data['content8']
+        orderIndustry(content8)
+
+        // 平台活动与行业分析 echarts
+        var content9 = data['content9']
+        activityOrder(content9)
+
+        // var secondaryRepair     // 工单二次维修数分析
     }
+
+
+    // 第三个页面websocket连接与收数据部分
+
 })
 $(function(){
     // index();
@@ -48,12 +89,12 @@ $(function(){
         })
     });
     $(".tabs ul li").each(function(index){
-       $(this).click(function(){
-           $(".tabs ul li div .div").removeClass("tabs_active");
-           $(this).find("div .div").addClass("tabs_active");
-           $(".tabs_map>div").eq(index).fadeIn().siblings("div").stop().hide();
-       })
-   });
+        $(this).click(function(){
+            $(".tabs ul li div .div").removeClass("tabs_active");
+            $(this).find("div .div").addClass("tabs_active");
+            $(".tabs_map>div").eq(index).fadeIn().siblings("div").stop().hide();
+        })
+    });
     $(".middle_top_bot ul li").each(function(){
         $(this).click(function(){
             $(".middle_top_bot ul li").removeClass("middle_top_bot_active");
@@ -1641,12 +1682,22 @@ function manage(){
         myChart.setOption(option);
     });
 }
-var buyTimeUpdater
+var buyTimeUpdater      // 巡检工单趋势
+var failureFactor       // 故障因素分析
+var faultType           // 故障类型分析
+var orderRepair         // 工单修复数
+var repairOrder         // 维修工单趋势
+var climateOrder        // 气候与工单量分析
+var orderEngineer       // 工单完成量与工程师分析
+var orderIndustry       // 巡检工单行业分析
+var activityOrder       // 平台活动与工单量分析
+var secondaryRepair     // 工单二次维修数分析
 //['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12','13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24']
 //[120, 132, 101, 146, 199, 230, 210, 230, 240, 256, 278, 300,120, 132, 101, 146, 199, 230, 210, 230, 240, 256, 278, 300]
 function yingXiao(){
 // 营销分析
 // 24小时购买时间分析
+// 巡检工单趋势(7日)
     $(buyTimeUpdater=function(xData,yData){
         if(typeof(arguments[1])=="undefined"){
             xData=buyTimeUpdatex
@@ -1721,8 +1772,8 @@ function yingXiao(){
         };
         myChart.setOption(option);
     });
-// 套餐类型分析
-    $(function(){
+// 故障因素分析
+    $(failureFactor=function(dataa){
         var myChart = echarts.init($("#Package01")[0]);
         option = {
             legend: {
@@ -1762,31 +1813,31 @@ function yingXiao(){
                     radius : '55%',
                     center: ['50%', '60%'],
                     data:[
-                        {value:335, name:'天气',
+                        {value:dataa['天气'], name:'天气',
                             itemStyle: {
                                 normal: {
                                     color:"#1afffd"
                                 }
                             }},
-                        {value:310, name:'质量',
+                        {value:dataa['质量'], name:'质量',
                             itemStyle: {
                                 normal: {
                                     color:"#2e7cff"
                                 }
                             }},
-                        {value:234, name:'环境',
+                        {value:dataa['环境'], name:'环境',
                             itemStyle: {
                                 normal: {
                                     color:"#ffcb89"
                                 }
                             }},
-                        {value:135, name:'人为',
+                        {value:dataa['人为'], name:'人为',
                             itemStyle: {
                                 normal: {
                                     color:"#005ea1"
                                 }
                             }},
-                        {value:1548, name:'其他',
+                        {value:dataa['其他'], name:'其他',
                             itemStyle: {
                                 normal: {
                                     color:"#0ad5ff"
@@ -1800,8 +1851,8 @@ function yingXiao(){
 
         myChart.setOption(option);
     });
-// 渠道分析
-    $(function(){
+// 故障类型分析
+    $(faultType=function(dataa){
         var myChart = echarts.init($("#rode01")[0]);
         option = {
 
@@ -1828,49 +1879,49 @@ function yingXiao(){
                     max: 40,                // for funnel
                     sort : 'ascending',     // for funnel
                     data:[
-                        {value:10, name:'摄像机',
+                        {value:dataa['摄像机'], name:'摄像机',
                             itemStyle: {
                                 normal: {
                                     color:"#45c0ff"
                                 }
                             }},
-                        {value:5, name:'监视器',
+                        {value:dataa['监视器'], name:'监视器',
                             itemStyle: {
                                 normal: {
                                     color:"#e15828"
                                 }
                             }},
-                        {value:15, name:'NVR',
+                        {value:dataa['NVR'], name:'NVR',
                             itemStyle: {
                                 normal: {
                                     color:"#ff81cb"
                                 }
                             }},
-                        {value:25, name:'拾音器',
+                        {value:dataa['拾音器'], name:'拾音器',
                             itemStyle: {
                                 normal: {
                                     color:"#2e7cff"
                                 }
                             }},
-                        {value:20, name:'报警',
+                        {value:dataa['报警'], name:'报警',
                             itemStyle: {
                                 normal: {
                                     color:"#feb602"
                                 }
                             }},
-                        {value:35, name:'门禁',
+                        {value:dataa['门禁'], name:'门禁',
                             itemStyle: {
                                 normal: {
                                     color:"#ff7d0a"
                                 }
                             }},
-                        {value:30, name:'电源',
+                        {value:dataa['电源'], name:'电源',
                             itemStyle: {
                                 normal: {
                                     color:"#1afffd"
                                 }
                             }},
-                        {value:40, name:'其他',
+                        {value:dataa['其他'], name:'其他',
                             itemStyle: {
                                 normal: {
                                     color:"#2e7cff"
@@ -1884,8 +1935,8 @@ function yingXiao(){
 
         myChart.setOption(option);
     });
-// 订退分析
-    $(function(){
+// 工单修复数
+    $(orderRepair=function(dataa){
         var myChart = echarts.init($("#bookAret")[0]);
         option = {
 
@@ -1913,15 +1964,15 @@ function yingXiao(){
                     type : 'category',
                     data : ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
                     axisLabel: {
-                    show: true,
-                    textStyle: {
-                        color: '#a4a7ab',
-                        align: 'center'
-                    },
-                    splitLine: {
-                        show: false
-                    },
-                }
+                        show: true,
+                        textStyle: {
+                            color: '#a4a7ab',
+                            align: 'center'
+                        },
+                        splitLine: {
+                            show: false
+                        },
+                    }
                 }
 
             ],
@@ -1944,7 +1995,7 @@ function yingXiao(){
                 {
                     name:'未修复数',
                     type:'bar',
-                    data:[100, 80, 136, 150, 120, 56, 200, 162, 105, 63, 169, 236],
+                    data:dataa['未修复'],
                     markPoint : {
                         data : [
                             {type : 'max', name: '最大值'},
@@ -1960,11 +2011,11 @@ function yingXiao(){
                 {
                     name:'已修复数',
                     type:'bar',
-                    data:[983, 820, 1236, 930, 1600, 1032, 890, 1300, 1921, 984, 1960, 2630],
+                    data:dataa['已修复'],
                     markPoint : {
                         data : [
-                            {name : '月最高', value : 2630, xAxis: 12, yAxis: 2630, symbolSize:18},
-                            {name : '月最低', value : 820, xAxis: 2, yAxis: 830}
+                            {type : 'max', name: '最大值'},
+                            {type : 'min', name: '最小值'}
                         ]
                     },
                     markLine : {
@@ -1979,8 +2030,9 @@ function yingXiao(){
 
         myChart.setOption(option);
     });
-// 按月进行趋势分析
-    $(function(){
+// 维修工单趋势
+    $(repairOrder=function(dataa){
+        console.log('维修工单趋势...')
         var myChart = echarts.init($("#bookBmonth")[0]);
         var option = {
             tooltip: {   //提示框，鼠标悬浮交互时的信息提示
@@ -2039,7 +2091,7 @@ function yingXiao(){
                     name: '',
                     type: 'line',
                     stack: '已修复数',
-                    data:[983, 820, 1236, 930, 1600, 1032, 890, 1300, 1921, 984, 1960, 2630],
+                    data:dataa,
                     itemStyle: {
                         normal: {
                             color: '#02bcbc'
@@ -2051,8 +2103,9 @@ function yingXiao(){
 
         myChart.setOption(option);
     });
-// 气候与订单分析
-    $(function(){
+// 气候与工单量分析
+    $(climateOrder=function(dataa){
+        console.log('气候与工单量分析...')
         var myChart = echarts.init($("#whearAbook")[0]);
         option = {
             tooltip : {
@@ -2128,7 +2181,7 @@ function yingXiao(){
                 {
                     name:'下雨',
                     type:'bar',
-                    data:[2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3],
+                    data:dataa['下雨'],
                     itemStyle: {
                         normal: {
                             color:"#0ad5ff"
@@ -2138,7 +2191,7 @@ function yingXiao(){
                 {
                     name:'下雪',
                     type:'bar',
-                    data:[2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3],
+                    data:dataa['下雪'],
                     itemStyle: {
                         normal: {
                             color:"#005ea1"
@@ -2148,7 +2201,7 @@ function yingXiao(){
                 {
                     name:'晴天',
                     type:'bar',
-                    data:[2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3],
+                    data:dataa['晴天'],
                     itemStyle: {
                         normal: {
                             color:"#2e7cff"
@@ -2159,7 +2212,7 @@ function yingXiao(){
                     name:'工单量',
                     type:'line',
                     yAxisIndex: 1,
-                    data:[2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2],
+                    data:dataa['工单量'],
                     itemStyle: {
                         normal: {
                             color:"#1afffd"
@@ -2171,8 +2224,9 @@ function yingXiao(){
 
         myChart.setOption(option);
     });
-// 交通与订单分析
-    $(function(){
+// 工单完成量与工程师分析
+    $(orderEngineer=function(dataa){
+        console.log('工单完成量与工程师分析...')
         var myChart = echarts.init($("#rodeAbook")[0]);
         option = {
             tooltip : {
@@ -2248,7 +2302,7 @@ function yingXiao(){
                     name:'有空',
                     type:'bar',
                     stack: '工程师',
-                    data:[120, 132, 101, 134, 90, 230, 210],
+                    data:dataa['有空'],
                     itemStyle: {
                         normal: {
                             color:"#ffcb89"
@@ -2259,7 +2313,7 @@ function yingXiao(){
                     name:'忙碌',
                     type:'bar',
                     stack: '工程师',
-                    data:[220, 232, 301, 234, 190, 330, 210],
+                    data:dataa['忙碌'],
                     itemStyle: {
                         normal: {
                             color:"#005ea1"
@@ -2271,7 +2325,7 @@ function yingXiao(){
                     name:'工单量',
                     type:'line',
                     yAxisIndex: 1,
-                    data:[320, 232, 101, 134, 290, 230, 210],
+                    data:dataa['工单量'],
                     itemStyle: {
                         normal: {
                             color:"#0ad5ff"
@@ -2283,8 +2337,8 @@ function yingXiao(){
 
         myChart.setOption(option);
     });
-// 季节与订单分析
-    $(function(){
+// 巡检工单行业分析
+    $(orderIndustry=function(dataa){
         var myChart = echarts.init($("#seaAbook01")[0]);
         option = {
 
@@ -2312,25 +2366,25 @@ function yingXiao(){
                     max: 40,                // for funnel
                     sort : 'ascending',     // for funnel
                     data:[
-                        {value:2560, name:'银行',
+                        {value:dataa['银行'], name:'银行',
                             itemStyle: {
                                 normal: {
                                     color:"#2e7cff"
                                 }
                             }},
-                        {value:3690, name:'教育',
+                        {value:dataa['教育'], name:'教育',
                             itemStyle: {
                                 normal: {
                                     color:"#ffcb89"
                                 }
                             }},
-                        {value:5690, name:'医疗',
+                        {value:dataa['医疗'], name:'医疗',
                             itemStyle: {
                                 normal: {
                                     color:"#005ea1"
                                 }
                             }},
-                        {value:6312, name:'其他',
+                        {value:dataa['其他'], name:'其他',
                             itemStyle: {
                                 normal: {
                                     color:"#0ad5ff"
@@ -2344,8 +2398,8 @@ function yingXiao(){
 
         myChart.setOption(option);
     });
-// 活动与订单分析
-    $(function(){
+// 平台活动与工单量分析
+    $(activityOrder=function(dataa){
         var myChart = echarts.init($("#actionBook")[0]);
         option = {
             tooltip : {
@@ -2399,7 +2453,7 @@ function yingXiao(){
                 {
                     name:'降价',
                     type:'bar',
-                    data:[320, 332, 301, 334, 390, 330, 320],
+                    data:dataa['降价'],
                     itemStyle: {
                         normal: {
                             color:"#2e7cff"
@@ -2411,7 +2465,7 @@ function yingXiao(){
                     type:'bar',
                     tooltip : {trigger: 'item'},
                     stack: '广告',
-                    data:[120, 132, 101, 134, 90, 230, 210],
+                    data:dataa['包年'],
                     itemStyle: {
                         normal: {
                             color:"#feb602"
@@ -2423,7 +2477,7 @@ function yingXiao(){
                     type:'bar',
                     tooltip : {trigger: 'item'},
                     stack: '广告',
-                    data:[220, 182, 191, 234, 290, 330, 310],
+                    data:dataa['账期'],
                     itemStyle: {
                         normal: {
                             color:"#ffcb89"
@@ -2435,7 +2489,7 @@ function yingXiao(){
                     type:'bar',
                     tooltip : {trigger: 'item'},
                     stack: '广告',
-                    data:[150, 232, 201, 154, 190, 330, 410],
+                    data:dataa['送积分'],
                     itemStyle: {
                         normal: {
                             color:"#005ea1"
@@ -2446,7 +2500,7 @@ function yingXiao(){
                 {
                     name:'订单趋势',
                     type:'line',
-                    data:[862, 1018, 964, 1026, 1679, 1600, 1570],
+                    data:dataa['订单趋势'],
                     itemStyle: {
                         normal: {
                             color:"#0ad5ff"
@@ -2471,25 +2525,25 @@ function yingXiao(){
                         }
                     },
                     data:[
-                        {value:1048, name:'降价',
+                        {value:dataa['降价总'], name:'降价',
                             itemStyle: {
                                 normal: {
                                     color:"#1afffd"
                                 }
                             }},
-                        {value:251, name:'包年',
+                        {value:dataa['包年总'], name:'包年',
                             itemStyle: {
                                 normal: {
                                     color:"#2e7cff"
                                 }
                             }},
-                        {value:147, name:'账期',
+                        {value:dataa['账期总'], name:'账期',
                             itemStyle: {
                                 normal: {
                                     color:"#ffcb89"
                                 }
                             }},
-                        {value:102, name:'送积分',
+                        {value:dataa['送积分总'], name:'送积分',
                             itemStyle: {
                                 normal: {
                                     color:"#005ea1"
@@ -2503,7 +2557,7 @@ function yingXiao(){
 
         myChart.setOption(option);
     });
-// 特殊时间点与订单分析
+// 工单二次维修数分析
     $(function(){
         var myChart = echarts.init($("#sperceBook01")[0]);
         option = {
@@ -2707,7 +2761,7 @@ function shouRu(){
                 }
             },
             grid:{
-              borderWidth:0
+                borderWidth:0
             },
             xAxis : [
                 {
@@ -2836,7 +2890,7 @@ function shouRu(){
                     stack: '总量',
                     itemStyle:{
                         normal:{
-                                color:'#28a3e1'
+                            color:'#28a3e1'
 
                         }
                     },
