@@ -6,8 +6,8 @@ var buyTimeUpdatey=[120, 132, 101, 146, 199, 230, 150]
 $(document).ready(function(){
     // 第二个页面websocket连接与收数据部分
     console.log('建立连接2...');
-    var websocket = new WebSocket("ws://127.0.0.1:8990/ws");
-    websocket.onopen = function(e){
+    var websocket2 = new WebSocket("ws://127.0.0.1:8990/ws");
+    websocket2.onopen = function(e){
         console.log('完成注册');
         var msg = {
             'content': '创建连接',
@@ -17,9 +17,9 @@ $(document).ready(function(){
             'clientId': 'client0001',
             'sendClientId': 'client0002'
         }
-        websocket.send(JSON.stringify(msg))
+        websocket2.send(JSON.stringify(msg))
     }
-    websocket.onmessage = function(e){
+    websocket2.onmessage = function(e){
         console.log(e.data)
         // 把接下来的数据根据分类绑定到不同的echarts上即可
         // 提供动态更新echarts的方式：
@@ -67,6 +67,45 @@ $(document).ready(function(){
 
 
     // 第三个页面websocket连接与收数据部分
+    console.log('建立连接3...');
+    var websocket3 = new WebSocket("ws://127.0.0.1:8990/ws");
+    websocket3.onopen = function(e) {
+        console.log('完成注册');
+        var msg = {
+            'content': '创建连接',
+            'sendTime': (new Date()).getTime(),
+            'spreadType': 'INITIAL',
+            'groupId': 'group0005',
+            'clientId': 'client0001',
+            'sendClientId': 'client0002'
+        }
+        websocket3.send(JSON.stringify(msg))
+    }
+
+    websocket3.onmessage = function(e) {
+        console.log(e.data)
+        // 把接下来的数据根据分类绑定到不同的echarts上即可
+        // 提供动态更新echarts的方式：
+        // 将 string 转化为 JSON
+        var data = JSON.parse(e.data)
+
+        // 收入行业分析 echarts
+        var content1 = data['content1']
+        IncomeIndustry(content1)
+        // 项目数量分析 echarts
+        var content2 = data['content2']
+        ProjectNumber(content2)
+        // 收入总额组成 echarts
+        var content3 = data['content3']
+        IncomeComposition(content3)
+        // 成本总额组成 echarts
+        var content4 = data['content4']
+        CostComposition(content4)
+        // 收入总额与成本总额 echarts
+        var content5 = data['content5']
+        IncomeAndCost(content5)
+    }
+
 
 })
 $(function(){
@@ -2743,10 +2782,16 @@ function yingXiao(){
 
 }
 
+var IncomeIndustry      // 收入行业分析
+var ProjectNumber       // 项目数量分析
+var IncomeComposition   // 收入总额组成
+var CostComposition     // 成本总额组成
+var IncomeAndCost       // 收入总额与成本总额
+
 function shouRu(){
-// 收入支出分析
-// 收入渠道分析
-    $(function(){
+// 项目信息分析
+// 收入行业分析
+    $(IncomeIndustry=function(dataa){
         var myChart = echarts.init($("#zhanbi02")[0]);
         var option = {
 
@@ -2812,7 +2857,7 @@ function shouRu(){
                     name:'渠道',
                     type:'bar',
                     stack: '总量',
-                    data:[2900, 1200, 300, 200, 900, 300],
+                    data:[dataa['总收入'], dataa['金融'], dataa['能源'], dataa['教育'], dataa['医疗'], dataa['文博']],
                     itemStyle: {
                         normal: {
                             color: '#2481ff'
@@ -2825,8 +2870,8 @@ function shouRu(){
 
         myChart.setOption(option);
     });
-// 支出渠道分析
-    $(function(){
+// 项目数量分析
+    $(ProjectNumber=function(dataa){
         var myChart = echarts.init($("#zhanbi03")[0]);
         option = {
 
@@ -2882,7 +2927,7 @@ function shouRu(){
                             color: '#1afffd'
                         }
                     },
-                    data:[0, 1700, 1400, 1200, 300, 0]
+                    data:dataa['总项目数']
                 },
                 {
                     name:'渠道',
@@ -2894,7 +2939,7 @@ function shouRu(){
 
                         }
                     },
-                    data:[2900, 1200, 300, 200, 900, 300]
+                    data:dataa['渠道']
                 }
             ]
         };
@@ -2902,8 +2947,8 @@ function shouRu(){
 
         myChart.setOption(option);
     });
-// 营销投入与销售量分析
-    $(function(){
+// 营销投入与项目收入总额分析
+    $(IncomeComposition=function(dataa){
         var myChart = echarts.init($("#allAly01")[0]);
         option = {
             title : {
@@ -2937,7 +2982,7 @@ function shouRu(){
                     radius : '55%',
                     center: ['50%', '60%'],
                     data:[
-                        {value:335, name:'项目收入',
+                        {value:dataa['项目收入'], name:'项目收入',
                             itemStyle:{
                                 normal:{
                                     color:'#1afffd'
@@ -2945,28 +2990,28 @@ function shouRu(){
                                 }
                             }
                         },
-                        {value:310, name:'咨询评价',
+                        {value:dataa['咨询评价'], name:'咨询评价',
                             itemStyle:{
                                 normal:{
                                     color:'#2e7cff'
 
                                 }
                             }},
-                        {value:234, name:'备品备件',
+                        {value:dataa['备品备件'], name:'备品备件',
                             itemStyle:{
                                 normal:{
                                     color:'#ffcb89'
 
                                 }
                             }},
-                        {value:135, name:'其他收入',
+                        {value:dataa['其他收入'], name:'其他收入',
                             itemStyle:{
                                 normal:{
                                     color:'#005ea1'
 
                                 }
                             }},
-                        {value:1548, name:'增值业务',
+                        {value:dataa['增值业务'], name:'增值业务',
                             itemStyle:{
                                 normal:{
                                     color:'#0ad5ff'
@@ -2981,7 +3026,7 @@ function shouRu(){
 
         myChart.setOption(option);
     });
-    $(function(){
+    $(CostComposition=function(dataa){
         var myChart = echarts.init($("#allAly02")[0]);
         option = {
             title : {
@@ -3015,63 +3060,63 @@ function shouRu(){
                     radius : '55%',
                     center: ['50%', '60%'],
                     data:[
-                        {value:335, name:'金融',
+                        {value:dataa['金融'], name:'金融',
                             itemStyle:{
                                 normal:{
                                     color:'#06b8f8'
 
                                 }
                             }},
-                        {value:310, name:'能源',
+                        {value:dataa['能源'], name:'能源',
                             itemStyle:{
                                 normal:{
                                     color:'#ff5c58'
 
                                 }
                             }},
-                        {value:234, name:'教育',
+                        {value:dataa['教育'], name:'教育',
                             itemStyle:{
                                 normal:{
                                     color:'#ffffb3'
 
                                 }
                             }},
-                        {value:135, name:'医疗',
+                        {value:dataa['医疗'], name:'医疗',
                             itemStyle:{
                                 normal:{
                                     color:'#fee581'
 
                                 }
                             }},
-                        {value:1548, name:'文博',
+                        {value:dataa['文博'], name:'文博',
                             itemStyle:{
                                 normal:{
                                     color:'#1afffd'
 
                                 }
                             }},
-                        {value:135, name:'酒店',
+                        {value:dataa['酒店'], name:'酒店',
                             itemStyle:{
                                 normal:{
                                     color:'#1ec7f1'
 
                                 }
                             }},
-                        {value:135, name:'写字楼',
+                        {value:dataa['写字楼'], name:'写字楼',
                             itemStyle:{
                                 normal:{
                                     color:'#e15828'
 
                                 }
                             }},
-                        {value:135, name:'物业',
+                        {value:dataa['物业'], name:'物业',
                             itemStyle:{
                                 normal:{
                                     color:'#28a3e1'
 
                                 }
                             }},
-                        {value:135, name:'军队',
+                        {value:dataa['军队'], name:'军队',
                             itemStyle:{
                                 normal:{
                                     color:'#72e7d5'
@@ -3086,7 +3131,7 @@ function shouRu(){
 
         myChart.setOption(option);
     });
-    $(function(){
+    $(IncomeAndCost=function(dataa){
         var myChart = echarts.init($("#allAly03")[0]);
         option = {
             title : {
@@ -3146,7 +3191,7 @@ function shouRu(){
                 {
                     name:'成本总额',
                     type:'bar',
-                    data:[2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3],
+                    data:dataa['成本总额'],
                     itemStyle: {
                         normal: {
                             color: '#2481ff'
@@ -3167,7 +3212,7 @@ function shouRu(){
                 {
                     name:'收入总额',
                     type:'bar',
-                    data:[2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3],
+                    data:dataa['收入总额'],
                     itemStyle: {
                         normal: {
                             color: '#1afffd'
@@ -3176,8 +3221,8 @@ function shouRu(){
 
                     markPoint : {
                         data : [
-                            {name : '最高', value : 182.2, xAxis: 7, yAxis: 183, symbolSize:18},
-                            {name : '最低', value : 2.3, xAxis: 11, yAxis: 3}
+                            {name : '最高', type: 'max', xAxis: 7, yAxis: 183, symbolSize:18},
+                            {name : '最低', type: 'min', xAxis: 11, yAxis: 3}
                         ]
                     },
                     markLine : {
@@ -3195,7 +3240,7 @@ function shouRu(){
 }
 
 function AnQuan(){
-    // 安全分析
+// 维保工程师分析
 // 事件趋势分析
     $(function(){
         var myChart = echarts.init($("#shijian01")[0]);
