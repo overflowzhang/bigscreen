@@ -1,13 +1,13 @@
 /**
  * Created by Administrator on 2017/5/17.
  */
-var buyTimeUpdatex=['1', '2', '3', '4', '5', '6']
-var buyTimeUpdatey=[120, 132, 101, 146, 199, 230]
+var buyTimeUpdatex=['1', '2', '3', '4', '5', '6', '7']
+var buyTimeUpdatey=[120, 132, 101, 146, 199, 230, 150]
 $(document).ready(function(){
-    // 第二个页面websocket连接与收数据部分
-    console.log('建立连接');
-    var websocket = new WebSocket("ws://127.0.0.1:8990/ws");
-    websocket.onopen = function(e){
+    // 第二个(维保工单分析)页面 websocket连接与收数据部分
+    console.log('建立连接2...');
+    var websocket2 = new WebSocket("ws://127.0.0.1:8990/ws");
+    websocket2.onopen = function(e){
         console.log('完成注册');
         var msg = {
             'content': '创建连接',
@@ -17,16 +17,219 @@ $(document).ready(function(){
             'clientId': 'client0001',
             'sendClientId': 'client0002'
         }
-        websocket.send(JSON.stringify(msg))
+        websocket2.send(JSON.stringify(msg))
     }
-    websocket.onmessage = function(e){
+    websocket2.onmessage = function(e){
         console.log(e.data)
         // 把接下来的数据根据分类绑定到不同的echarts上即可
         // 提供动态更新echarts的方式：
-        buyTimeUpdatex.push('7')
-        buyTimeUpdatey.push(140)
+        // 将 string 转化为 JSON
+        var data = JSON.parse(e.data)
+        // 巡检工单趋势 echarts
+        var content1 = data['content1']
+        buyTimeUpdatey = content1['data']
         buyTimeUpdater(buyTimeUpdatex,buyTimeUpdatey);
+
+        // 故障因素分析 echarts
+        var content2 = data['content2']
+        failureFactor(content2)
+
+        // 故障类型分析 echarts
+        var content3 = data['content3']
+        faultType(content3)
+
+        // 工单修复数 echarts
+        var content4 = data['content4']
+        orderRepair(content4)
+
+        // 维修工单趋势 echarts
+        var content5 = data['content5']
+        repairOrder(content5['data'])
+
+        // 气候与工单量分析 echarts
+        var content6 = data['content6']
+        climateOrder(content6)
+
+        // 工单完成量与工程师分析 echarts
+        var content7 = data['content7']
+        orderEngineer(content7)
+
+        // 巡检工单行业分析 echarts
+        var content8 = data['content8']
+        orderIndustry(content8)
+
+        // 平台活动与行业分析 echarts
+        var content9 = data['content9']
+        activityOrder(content9)
+
+        // var secondaryRepair     // 工单二次维修数分析
     }
+
+
+    // 第三个(项目信息分析)页面websocket连接与收数据部分
+    console.log('建立连接3...');
+    var websocket3 = new WebSocket("ws://127.0.0.1:8990/ws");
+    websocket3.onopen = function(e) {
+        console.log('完成注册');
+        var msg = {
+            'content': '创建连接',
+            'sendTime': (new Date()).getTime(),
+            'spreadType': 'INITIAL',
+            'groupId': 'group0005',
+            'clientId': 'client0001',
+            'sendClientId': 'client0002'
+        }
+        websocket3.send(JSON.stringify(msg))
+    }
+
+    websocket3.onmessage = function(e) {
+        console.log(e.data)
+        // 把接下来的数据根据分类绑定到不同的echarts上即可
+        // 提供动态更新echarts的方式：
+        // 将 string 转化为 JSON
+        var data = JSON.parse(e.data)
+
+        // 收入行业分析 echarts
+        var content1 = data['content1']
+        IncomeIndustry(content1)
+        // 项目数量分析 echarts
+        var content2 = data['content2']
+        ProjectNumber(content2)
+        // 收入总额组成 echarts
+        var content3 = data['content3']
+        IncomeComposition(content3)
+        // 成本总额组成 echarts
+        var content4 = data['content4']
+        CostComposition(content4)
+        // 收入总额与成本总额 echarts
+        var content5 = data['content5']
+        IncomeAndCost(content5)
+    }
+
+    // 第四个(维保工程师分析)页面 websocket连接与收数据部分
+    console.log('建立连接4...');
+    var websocket4 = new WebSocket("ws://127.0.0.1:8990/ws");
+    websocket4.onopen = function(e) {
+        console.log('完成注册');
+        var msg = {
+            'content': '创建连接',
+            'sendTime': (new Date()).getTime(),
+            'spreadType': 'INITIAL',
+            'groupId': 'group0006',
+            'clientId': 'client0001',
+            'sendClientId': 'client0002'
+        }
+        websocket4.send(JSON.stringify(msg))
+    }
+
+    websocket4.onmessage = function(e) {
+        console.log(e.data)
+        // 把接下来的数据根据分类绑定到不同的echarts上即可
+        // 提供动态更新echarts的方式：
+        // 将 string 转化为 JSON
+        var data = JSON.parse(e.data)
+        // 工程师性别占比
+        var content1 = data['content1']
+        GenderRatio(content1)
+        // 工程师专业占比
+        var content2 = data['content2']
+        MajorRatio(content2)
+        // 工程师年龄段占比
+        var content3 = data['content3']
+        AgeRatio(content3)
+        // 各专业活跃工程师数量情况
+        var content4 = data['content4']
+        ProfessionNumber(content4)
+        // 工单完成率排名
+        var content5 = data['content5']
+        OrderRank(content5)
+        // 月在线工程师数量
+        var content6 = data['content6']
+        MonthOnline(content6)
+        // 未按时完成工单数量情况
+        var content7 = data['content7']
+        NotComplete(content7)
+        // 月工单完成情况工程师数量分析
+        var content8 = data['content8']
+        MonthCompletionNum(content8)
+        // 月工单处理总量前7名工程师分析
+        var content9 = data['content9']
+        MonthTotalRank(content9)
+        // 故障原因分析
+        var content10 = data['content10']
+        FailureCause(content10)
+        // 故障处理情况
+        var content11 = data['content11']
+        FaultHand(content11)
+
+    }
+
+    // 第五个(终端客户分析)页面 websocket连接与收数据部分
+    console.log('建立连接5...');
+    var websocket4 = new WebSocket("ws://127.0.0.1:8990/ws");
+    websocket4.onopen = function(e) {
+        console.log('完成注册');
+        var msg = {
+            'content': '创建连接',
+            'sendTime': (new Date()).getTime(),
+            'spreadType': 'INITIAL',
+            'groupId': 'group0007',
+            'clientId': 'client0001',
+            'sendClientId': 'client0002'
+        }
+        websocket5.send(JSON.stringify(msg))
+    }
+
+    websocket5.onmessage = function(e) {
+        console.log(e.data)
+        // 把接下来的数据根据分类绑定到不同的echarts上即可
+        // 提供动态更新echarts的方式：
+        // 将 string 转化为 JSON
+        var data = JSON.parse(e.data)
+
+        // 客户类型分析 echarts
+        var content1 = data['content1']
+        CustomerType(content1)
+
+        // 客户区域分析 echarts
+        var content2 = data['content2']
+        CustomerArea(content2)
+
+        // 客户行业分析 echarts
+        var content3 = data['content3']
+        CustomerIndustry(content3)
+
+        // 月活跃客户数据分析 echarts
+        var content4 = data['content4']
+        MonthActiveCustomer(content4)
+
+        // 当日客户在线情况 echarts
+        var content5 = data['content5']
+        CustomerOnline(content5)
+
+        // 月客户总数分析 echarts
+        var content6 = data['content6']
+        TotalMonthCustomer(content6)
+
+        // 分类客户趋势分析 echarts
+        var content7 = data['content7']
+        ClassifiedCustomer(content7)
+
+        // 客户倾向性类型分析 echarts
+        var content8 = data['content8']
+        CustomerPreferenceType(content8)
+
+        // 行业活跃客户数 echarts
+        var content9 = data['content9']
+        IndustryActiveCustomer(content9)
+
+        // 天气与活跃客户数分析 echarts
+        var content10 = data['content10']
+        WeatherAndActiveCustomer(content10)
+
+    }
+
+
 })
 $(function(){
     // index();
@@ -48,12 +251,12 @@ $(function(){
         })
     });
     $(".tabs ul li").each(function(index){
-       $(this).click(function(){
-           $(".tabs ul li div .div").removeClass("tabs_active");
-           $(this).find("div .div").addClass("tabs_active");
-           $(".tabs_map>div").eq(index).fadeIn().siblings("div").stop().hide();
-       })
-   });
+        $(this).click(function(){
+            $(".tabs ul li div .div").removeClass("tabs_active");
+            $(this).find("div .div").addClass("tabs_active");
+            $(".tabs_map>div").eq(index).fadeIn().siblings("div").stop().hide();
+        })
+    });
     $(".middle_top_bot ul li").each(function(){
         $(this).click(function(){
             $(".middle_top_bot ul li").removeClass("middle_top_bot_active");
@@ -63,9 +266,21 @@ $(function(){
 
 });
 
+var CustomerType        // 客户类型分析
+var CustomerArea        // 客户区域分析
+var CustomerIndustry    // 客户行业分析
+var MonthActiveCustomer // 月活跃客户数据分析
+var CustomerOnline      // 当日客户在线情况
+var TotalMonthCustomer  // 月客户总数分析
+var ClassifiedCustomer  // 分类客户趋势分析
+var CustomerPreferenceType  // 客户倾向性类型分析
+var IndustryActiveCustomer  // 行业活跃客户数
+var WeatherAndActiveCustomer    // 天气与活跃客户数分析
+
 function user(){
-    //游客来源分析
-    $(function(){
+    // 终端客户分析
+    // 客户区域分析
+    $(CustomerArea=function(dataa){
         var myChart = echarts.init($("#container1")[0]);
         var option = {
             tooltip : {
@@ -98,7 +313,7 @@ function user(){
                     center: ['50%', '60%'],
                     data:[
                         {
-                            value:324,
+                            value:dataa['海淀'],
                             name:'海淀',
                             itemStyle:{
                                 normal:{
@@ -107,7 +322,7 @@ function user(){
                             }
                         },
                         {
-                            value:186,
+                            value:dataa['西城'],
                             name:'西城',
                             itemStyle:{
                                 normal:{
@@ -116,7 +331,7 @@ function user(){
                             }
                         },
                         {
-                            value:99,
+                            value:dataa['丰台'],
                             name:'丰台',
                             itemStyle:{
                                 normal:{
@@ -126,7 +341,7 @@ function user(){
                         }
                         ,
                         {
-                            value:39,
+                            value:dataa['朝阳'],
                             name:'朝阳',
                             itemStyle:{
                                 normal:{
@@ -136,7 +351,7 @@ function user(){
                         }
                         ,
                         {
-                            value:78,
+                            value:dataa['其他'],
                             name:'其他',
                             itemStyle:{
                                 normal:{
@@ -159,13 +374,13 @@ function user(){
             ]
         };
 
-
+        console.log("客户区域分析.......................")
 
         myChart.setOption(option);
     });
 
-//游客性别分析
-    $(function(){
+// 客户类型分析
+    $(CustomerType=function(dataa){
         var myChart = echarts.init($("#container2")[0]);
         var option = {
             tooltip : {
@@ -198,13 +413,13 @@ function user(){
                     radius : '55%',
                     center: ['50%', '60%'],
                     data:[
-                        {value:90, name:'单位客户',
+                        {value:dataa['单位客户'], name:'单位客户',
                             itemStyle:{
                                 normal:{
                                     color:"#2865aa"
                                 }
                             }},
-                        {value:10, name:'个人客户',
+                        {value:dataa['个体客户'], name:'个人客户',
                             itemStyle:{
                                 normal:{
                                     color:"#ff81cb"
@@ -220,8 +435,8 @@ function user(){
         myChart.setOption(option);
     });
 
-//游客年龄分析
-    $(function(){
+// 客户行业分析
+    $(CustomerIndustry=function(dataa){
         var myChart = echarts.init($("#container3")[0]);
         var option = {
             tooltip : {
@@ -254,31 +469,31 @@ function user(){
                     radius : '55%',
                     center: ['50%', '60%'],
                     data:[
-                        {value:90, name:'金融',
+                        {value:dataa['金融'], name:'金融',
                             itemStyle:{
                                 normal:{
                                     color:"#45c0ff"
                                 }
                             }},
-                        {value:254, name:'能源',
+                        {value:dataa['能源'], name:'能源',
                             itemStyle:{
                                 normal:{
                                     color:"#e15828"
                                 }
                             }},
-                        {value:362, name:'教育',
+                        {value:dataa['教育'], name:'教育',
                             itemStyle:{
                                 normal:{
                                     color:"#005ea1"
                                 }
                             }},
-                        {value:152, name:'医疗',
+                        {value:dataa['医疗'], name:'医疗',
                             itemStyle:{
                                 normal:{
                                     color:"#ff81cb"
                                 }
                             }},
-                        {value:86, name:'其他',
+                        {value:dataa['其他'], name:'其他',
                             itemStyle:{
                                 normal:{
                                     color:"#2e7cff"
@@ -293,8 +508,8 @@ function user(){
         myChart.setOption(option);
     });
 
-//散客——团队分析
-    $(function(){
+// 月活跃客户收据分析
+    $(MonthActiveCustomer=function(dataa){
         var myChart = echarts.init(document.getElementById('container4'));
         var option = {
             tooltip : {
@@ -352,7 +567,7 @@ function user(){
                     type:'bar',
                     stack: '广告',
                     barWidth:'30',
-                    data:[320, 332, 301, 334, 390, 330, 320, 332, 301, 334, 390, 330],
+                    data:dataa['两方合同客户'],
                     itemStyle:{
                         normal:{
                             color:"#1afffd"
@@ -363,7 +578,7 @@ function user(){
                     name:'三方合同客户（个）',
                     type:'bar',
                     stack: '广告',
-                    data:[120, 132, 101, 134, 90, 230, 210,220, 182, 191, 234, 290],
+                    data:dataa['三方合同客户'],
                     itemStyle:{
                         normal:{
                             color:"#2e7cff"
@@ -377,8 +592,8 @@ function user(){
         myChart.setOption(option);
     });
 
-//天气游客数据分析
-    $(function(){
+// 天气与活跃客户数分析
+    $(WeatherAndActiveCustomer=function(dataa){
         var myChart = echarts.init(document.getElementById('container5'));
         var option = {
             tooltip : {
@@ -432,7 +647,7 @@ function user(){
                 {
                     name:'个人客户（百人）',
                     type:'bar',
-                    data:[20, 15, 15, 16, 18, 15, 10,26,30],
+                    data:dataa['个体客户'],
                     itemStyle:{
                         normal:{
                             color:"#2e7cff"
@@ -443,7 +658,7 @@ function user(){
                     name:'单位客户（百人）',
                     type:'bar',
                     stack: '广告',
-                    data:[20, 35, 50, 66, 84, 99, 109,80,70],
+                    data:dataa['单位客户'],
                     itemStyle:{
                         normal:{
                             color:"#0ad5ff"
@@ -457,8 +672,8 @@ function user(){
         myChart.setOption(option);
     });
 
-//游客出行交通方式分析
-    $(function(){
+// 行业活跃客户数
+    $(IndustryActiveCustomer=function(dataa){
         var myChart = echarts.init($("#container6")[0]);
         var option = {
             tooltip : {
@@ -511,7 +726,7 @@ function user(){
                     name:'客户数量（千个）',
                     type:'bar',
                     barWidth:'30',
-                    data:[5, 9, 10, 7, 6, 3, 8, 4,6, 7, 3, 3, 1],
+                    data:[dataa['金融'], dataa['能源'], dataa['教育'], dataa['医疗'], dataa['文博'], dataa['其他']],
                     itemStyle: {
                         normal: {
                             color:"#0aff6c"
@@ -524,8 +739,8 @@ function user(){
         myChart.setOption(option);
     });
 
-    //不同时间段入园情况
-    $(function(){
+    // 当日客户在线情况
+    $(CustomerOnline=function(dataa){
         var myChart = echarts.init($("#container9")[0]);
         var option = {
             tooltip: {   //提示框，鼠标悬浮交互时的信息提示
@@ -585,7 +800,7 @@ function user(){
                     name: '在线客户数（个）',
                     type: 'line',
                     stack: '在线客户数',
-                    data: [1200, 1322, 1401, 1046, 1499, 820],
+                    data: [dataa['8:00-10:00'], dataa['10:00-12:00'], dataa['12:00-14:00'], dataa['14:00-16:00'], dataa['16:00-18:00'], dataa['18:00-20:00']],
                     itemStyle: {
                         normal: {
                             color: '#02bcbc'
@@ -598,8 +813,8 @@ function user(){
         myChart.setOption(option);
     });
 
-//不同月份游客数量情况
-    $(function(){
+// 月客户总数分析
+    $(TotalMonthCustomer=function(dataa){
         var myChart = echarts.init($("#container10")[0]);
         var option = {
             tooltip : {
@@ -652,7 +867,7 @@ function user(){
                     name:'客户数量（千个）',
                     type:'bar',
                     barWidth:'30',
-                    data:[5, 9, 10, 7, 6, 3, 8, 4,6, 7, 3, 3, 1],
+                    data:dataa['月客户总数'],
                     itemStyle: {
                         normal: {
                             color:"#269fec"
@@ -665,8 +880,8 @@ function user(){
         myChart.setOption(option);
     });
 
-//不同月份游客走势情况
-    $(function(){
+// 分类客户趋势分析
+    $(ClassifiedCustomer=function(dataa){
         var myChart = echarts.init(document.getElementById('container11'));
         var option = {
             tooltip : {
@@ -716,7 +931,7 @@ function user(){
                     name:'个人客户',
                     type:'line',
                     stack: '人',
-                    data:[120, 132, 101, 134, 90, 230, 210,230,245,256,278,300],
+                    data:dataa['个体客户'],
                     itemStyle: {
                         normal: {
                             color:"#e15828"
@@ -727,7 +942,7 @@ function user(){
                     name:'单位客户',
                     type:'line',
                     stack: '人',
-                    data:[220, 182, 191, 234, 290, 330, 310,230,245,256,278,300],
+                    data:dataa['单位客户'],
                     itemStyle: {
                         normal: {
                             color:"#2e7cff"
@@ -739,8 +954,8 @@ function user(){
         myChart.setOption(option);
     });
 
-//出行方式排行
-    $(function(){
+// 客户倾向性类型分析
+    $(CustomerPreferenceType=function(dataa){
         var myChart = echarts.init($("#container12")[0]);
         var option = {
             tooltip : {
@@ -793,7 +1008,7 @@ function user(){
                             position: 'insideRight'
                         }
                     },
-                    data: [9900, 12350, 42563, 52364, 63524, 78224, 89254],
+                    data: [dataa['其他'], dataa['熟悉'], dataa['效率'], dataa['专业'], dataa['成本']],
                     itemStyle: {
                         normal: {
                             color:"#ff7d0a"
@@ -806,10 +1021,23 @@ function user(){
     });
 
 }
+
+var GenderRatio         // 工程师性别占比
+var MajorRatio          // 工程师专业占比
+var AgeRatio            // 工程师年龄段占比
+var ProfessionNumber    // 各专业活跃工程师数量情况
+var OrderRank           // 工单完成率排名
+var MonthOnline         // 月在线工程师数量
+var NotComplete         // 未按时完成工单数量情况
+var MonthCompletionNum  // 月工单完成情况工程师数量分析
+var MonthTotalRank      // 月工单处理总量前7名工程师分析
+var FailureCause        // 故障原因分析
+var FaultHand           // 故障处理情况
+
 function manage(){
 
-//工作人员性别分析
-    $(function(){
+// 工程师性别占比
+    $(GenderRatio=function(dataa){
         var myChart = echarts.init($("#userContainerSex")[0]);
         var option = {
             tooltip : {
@@ -842,13 +1070,13 @@ function manage(){
                     radius : '55%',
                     center: ['50%', '60%'],
                     data:[
-                        {value:90, name:'男性',
+                        {value:dataa['男性'], name:'男性',
                             itemStyle:{
                                 normal:{
                                     color:"#2865aa"
                                 }
                             }},
-                        {value:10, name:'女性',
+                        {value:dataa['女性'], name:'女性',
                             itemStyle:{
                                 normal:{
                                     color:"#ff81cb"
@@ -864,8 +1092,8 @@ function manage(){
         myChart.setOption(option);
     });
 
-//工作人员来源分析
-    $(function(){
+// 工程师专业占比
+    $(MajorRatio=function(dataa){
         var myChart = echarts.init($("#userContainerManage")[0]);
         var option = {
             tooltip : {
@@ -898,7 +1126,7 @@ function manage(){
                     center: ['50%', '60%'],
                     data:[
                         {
-                            value:324,
+                            value:dataa['视频监控'],
                             name:'视频监控',
                             itemStyle:{
                                 normal:{
@@ -907,7 +1135,7 @@ function manage(){
                             }
                         },
                         {
-                            value:186,
+                            value:dataa['入侵和报警'],
                             name:'入侵和报警',
                             itemStyle:{
                                 normal:{
@@ -916,7 +1144,7 @@ function manage(){
                             }
                         },
                         {
-                            value:99,
+                            value:dataa['出入口控制'],
                             name:'出入口控制',
                             itemStyle:{
                                 normal:{
@@ -926,7 +1154,7 @@ function manage(){
                         }
                         ,
                         {
-                            value:39,
+                            value:dataa['停车场安全'],
                             name:'停车场安全',
                             itemStyle:{
                                 normal:{
@@ -936,7 +1164,7 @@ function manage(){
                         }
                         ,
                         {
-                            value:78,
+                            value:dataa['防爆安全'],
                             name:'防爆安全',
                             itemStyle:{
                                 normal:{
@@ -945,7 +1173,7 @@ function manage(){
                             }
                         },
                         {
-                            value:78,
+                            value:dataa['其他专业'],
                             name:'其他专业',
                             itemStyle:{
                                 normal:{
@@ -978,8 +1206,8 @@ function manage(){
         myChart.setOption(option);
     });
 
-//工作人员年龄分析
-    $(function(){
+// 工程师年龄段占比
+    $(AgeRatio=function(dataa){
         var myChart = echarts.init($("#userContainerAge")[0]);
         var option = {
             tooltip : {
@@ -1012,31 +1240,31 @@ function manage(){
                     radius : '55%',
                     center: ['50%', '60%'],
                     data:[
-                        {value:90, name:'少年',
+                        {value:dataa['少年'], name:'少年',
                             itemStyle:{
                                 normal:{
                                     color:"#0ad5ff"
                                 }
                             }},
-                        {value:254, name:'青年',
+                        {value:dataa['青年'], name:'青年',
                             itemStyle:{
                                 normal:{
                                     color:"#005ea1"
                                 }
                             }},
-                        {value:362, name:'中年',
+                        {value:dataa['中年'], name:'中年',
                             itemStyle:{
                                 normal:{
                                     color:"#ffcb89"
                                 }
                             }},
-                        {value:152, name:'老年',
+                        {value:dataa['老年'], name:'老年',
                             itemStyle:{
                                 normal:{
                                     color:"#2e7cff"
                                 }
                             }},
-                        {value:86, name:'其他',
+                        {value:dataa['其他'], name:'其他',
                             itemStyle:{
                                 normal:{
                                     color:"#1afffd"
@@ -1051,9 +1279,8 @@ function manage(){
         myChart.setOption(option);
     });
 
-
-//景区个部门出勤情况分析
-    $(function(){
+// 各专业活跃工程师数量情况
+    $(ProfessionNumber=function(dataa){
         var myChart = echarts.init($("#userContainerAttendance")[0]);
         var option = {
             tooltip : {
@@ -1106,7 +1333,7 @@ function manage(){
                     name:'工程师数（人）',
                     type:'bar',
                     barWidth:'30',
-                    data:[76, 56, 39, 77, 86, 95, 58, 4,6, 7, 3, 3, 1],
+                    data:dataa['工程师数'],
                     itemStyle: {
                         normal: {
                             color:"#1afffd"
@@ -1119,8 +1346,8 @@ function manage(){
         myChart.setOption(option);
     });
 
-//个人出勤率排行
-    $(function(){
+// 工单完成率排名
+    $(OrderRank=function(dataa){
         var myChart = echarts.init($("#userContainerPersonal")[0]);
         var option = {
             tooltip : {
@@ -1151,7 +1378,7 @@ function manage(){
             },
             yAxis: {
                 type: 'category',
-                data: ['陈杰','李进','张佳倩','孙林','李杰'],
+                data: dataa['工程师'],
                 splitLine: {
                     show: false
                 },
@@ -1173,7 +1400,7 @@ function manage(){
                             position: 'insideRight'
                         }
                     },
-                    data: [60, 72, 85, 96, 99],
+                    data: dataa['完成率'],
                     itemStyle: {
                         normal: {
                             color:"#45c0ff"
@@ -1185,8 +1412,8 @@ function manage(){
         myChart.setOption(option);
     });
 
-//不同月份人员流动情况
-    $(function(){
+// 月在线工程师数量
+    $(MonthOnline=function(dataa){
         var myChart = echarts.init(document.getElementById('userContainerFlow'));
         var option = {
             tooltip : {
@@ -1236,7 +1463,7 @@ function manage(){
                     name:'工程师人数',
                     type:'line',
                     stack: '人',
-                    data:[120, 132, 101, 134, 90, 230, 210,230,245,256,278,300],
+                    data:dataa['工程师人数'],
                     itemStyle: {
                         normal: {
                             color:"#1afffd"
@@ -1248,8 +1475,8 @@ function manage(){
         myChart.setOption(option);
     });
 
-//景区个部门违规操作分析
-    $(function(){
+// 未按时完成工单工程师数量
+    $(NotComplete=function(dataa){
         var myChart = echarts.init($("#userContainerIllegal")[0]);
         var option = {
             tooltip : {
@@ -1302,7 +1529,7 @@ function manage(){
                     name:'工程师数量（人）',
                     type:'bar',
                     barWidth:'30',
-                    data:[124, 522, 235, 365, 214, 265, 58, 4,6, 7, 3, 3, 1],
+                    data:dataa['工程师数量'],
                     itemStyle: {
                         normal: {
                             color:"#269fec"
@@ -1315,8 +1542,8 @@ function manage(){
         myChart.setOption(option);
     });
 
-//不同月份各部门被投诉分析
-    $(function(){
+// 月工单完成情况工程师数量分析
+    $(MonthCompletionNum=function(dataa){
         var myChart = echarts.init(document.getElementById('userContainerComplaint'));
         var option = {
             tooltip : {
@@ -1366,7 +1593,7 @@ function manage(){
                     name:'其他',
                     type:'line',
                     stack: '人',
-                    data:[120, 132, 101, 134, 90, 230, 210,230,245,256,278,300],
+                    data:dataa['其他'],
                     itemStyle: {
                         normal: {
                             color:"#45c0ff"
@@ -1377,7 +1604,7 @@ function manage(){
                     name:'客户好评',
                     type:'line',
                     stack: '人',
-                    data:[220, 182, 191, 234, 290, 330, 310,230,245,256,278,300],
+                    data:dataa['客户好评'],
                     itemStyle: {
                         normal: {
                             color:"#0ad5ff"
@@ -1388,7 +1615,7 @@ function manage(){
                     name:'未按时完成',
                     type:'line',
                     stack: '人',
-                    data:[220, 182, 191, 234, 290, 330, 310,230,245,256,278,300],
+                    data:dataa['未按时完成'],
                     itemStyle: {
                         normal: {
                             color:"#005ea1"
@@ -1399,7 +1626,7 @@ function manage(){
                     name:'超期完成',
                     type:'line',
                     stack: '人',
-                    data:[220, 182, 191, 234, 290, 330, 310,230,245,256,278,300],
+                    data:dataa['超期完成'],
                     itemStyle: {
                         normal: {
                             color:"#ffcb89"
@@ -1410,7 +1637,7 @@ function manage(){
                     name:'二次维修',
                     type:'line',
                     stack: '人',
-                    data:[220, 182, 191, 234, 290, 330, 310,230,245,256,278,300],
+                    data:dataa['二次维修'],
                     itemStyle: {
                         normal: {
                             color:"#2e7cff"
@@ -1421,7 +1648,7 @@ function manage(){
                     name:'一次维修',
                     type:'line',
                     stack: '人',
-                    data:[220, 182, 191, 234, 290, 330, 310,230,245,256,278,300],
+                    data:dataa['一次维修'],
                     itemStyle: {
                         normal: {
                             color:"#1afffd"
@@ -1433,8 +1660,8 @@ function manage(){
         myChart.setOption(option);
     });
 
-//员工奖惩分析
-    $(function(){
+// 月工单处理总量前7名工程师分析
+    $(MonthTotalRank=function(dataa){
         var myChart = echarts.init(document.getElementById('userContainerPrize'));
         var option = {
             tooltip : {
@@ -1457,7 +1684,7 @@ function manage(){
             xAxis : [
                 {
                     type : 'category',
-                    data : ['李杰', '赵一鸣', '陈爽', '李焕', '周伟', '张杰','王维'],
+                    data : dataa['工程师'],
                     splitLine: {
                         show: false
                     },
@@ -1488,7 +1715,7 @@ function manage(){
                 {
                     name:'好评（次）',
                     type:'bar',
-                    data:[5, 7, 4, 1, 2, 9, 6,5,7],
+                    data:dataa['好评'],
                     itemStyle:{
                         normal:{
                             color:"#1afffd"
@@ -1499,7 +1726,7 @@ function manage(){
                     name:'差评（次）',
                     type:'bar',
                     stack: '广告',
-                    data:[2, 1, 4, 9, 7, 5, 2,7,6],
+                    data:dataa['差评'],
                     itemStyle:{
                         normal:{
                             color:"#2e7cff"
@@ -1513,8 +1740,8 @@ function manage(){
         myChart.setOption(option);
     });
 
-//设备故障原因分析
-    $(function(){
+// 故障原因分析
+    $(FailureCause=function(dataa){
         var myChart = echarts.init(document.getElementById('userContainerReason'));
         var option = {
             tooltip : {
@@ -1536,31 +1763,31 @@ function manage(){
                     radius : '55%',
                     center: ['50%', '60%'],
                     data:[
-                        {value:335, name:'人为破坏',
+                        {value:dataa['人为破坏'], name:'人为破坏',
                             itemStyle:{
                                 normal:{
                                     color:"#1afffd"
                                 }
                             }},
-                        {value:310, name:'年久失修',
+                        {value:dataa['年久未修'], name:'年久失修',
                             itemStyle:{
                                 normal:{
                                     color:"#2e7cff"
                                 }
                             }},
-                        {value:234, name:'自然因素',
+                        {value:dataa['自然因素'], name:'自然因素',
                             itemStyle:{
                                 normal:{
                                     color:"#ffcb89"
                                 }
                             }},
-                        {value:135, name:'设备过期',
+                        {value:dataa['设备过期'], name:'设备过期',
                             itemStyle:{
                                 normal:{
                                     color:"#005ea1"
                                 }
                             }},
-                        {value:148, name:'其他',
+                        {value:dataa['其他'], name:'其他',
                             itemStyle:{
                                 normal:{
                                     color:"#45c0ff"
@@ -1580,8 +1807,8 @@ function manage(){
         myChart.setOption(option);
     });
 
-//故障处理情况分析
-    $(function(){
+// 故障处理情况
+    $(FaultHand=function(dataa){
         var myChart = echarts.init(document.getElementById('userContainerHandle'));
         var option = {
             tooltip : {
@@ -1603,25 +1830,25 @@ function manage(){
                     radius : '55%',
                     center: ['50%', '60%'],
                     data:[
-                        {value:335, name:'已处理',
+                        {value:dataa['已处理'], name:'已处理',
                             itemStyle:{
                                 normal:{
                                     color:"#2e7cff"
                                 }
                             }},
-                        {value:310, name:'未处理',
+                        {value:dataa['未处理'], name:'未处理',
                             itemStyle:{
                                 normal:{
                                     color:"#ffcb89"
                                 }
                             }},
-                        {value:234, name:'超期未处理',
+                        {value:dataa['超期未处理'], name:'超期未处理',
                             itemStyle:{
                                 normal:{
                                     color:"#2864ab"
                                 }
                             }},
-                        {value:148, name:'其他',
+                        {value:dataa['其他'], name:'其他',
                             itemStyle:{
                                 normal:{
                                     color:"#e15828"
@@ -1641,12 +1868,22 @@ function manage(){
         myChart.setOption(option);
     });
 }
-var buyTimeUpdater
+var buyTimeUpdater      // 巡检工单趋势
+var failureFactor       // 故障因素分析
+var faultType           // 故障类型分析
+var orderRepair         // 工单修复数
+var repairOrder         // 维修工单趋势
+var climateOrder        // 气候与工单量分析
+var orderEngineer       // 工单完成量与工程师分析
+var orderIndustry       // 巡检工单行业分析
+var activityOrder       // 平台活动与工单量分析
+var secondaryRepair     // 工单二次维修数分析
 //['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12','13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24']
 //[120, 132, 101, 146, 199, 230, 210, 230, 240, 256, 278, 300,120, 132, 101, 146, 199, 230, 210, 230, 240, 256, 278, 300]
 function yingXiao(){
 // 营销分析
 // 24小时购买时间分析
+// 巡检工单趋势(7日)
     $(buyTimeUpdater=function(xData,yData){
         if(typeof(arguments[1])=="undefined"){
             xData=buyTimeUpdatex
@@ -1721,8 +1958,8 @@ function yingXiao(){
         };
         myChart.setOption(option);
     });
-// 套餐类型分析
-    $(function(){
+// 故障因素分析
+    $(failureFactor=function(dataa){
         var myChart = echarts.init($("#Package01")[0]);
         option = {
             legend: {
@@ -1762,31 +1999,31 @@ function yingXiao(){
                     radius : '55%',
                     center: ['50%', '60%'],
                     data:[
-                        {value:335, name:'天气',
+                        {value:dataa['天气'], name:'天气',
                             itemStyle: {
                                 normal: {
                                     color:"#1afffd"
                                 }
                             }},
-                        {value:310, name:'质量',
+                        {value:dataa['质量'], name:'质量',
                             itemStyle: {
                                 normal: {
                                     color:"#2e7cff"
                                 }
                             }},
-                        {value:234, name:'环境',
+                        {value:dataa['环境'], name:'环境',
                             itemStyle: {
                                 normal: {
                                     color:"#ffcb89"
                                 }
                             }},
-                        {value:135, name:'人为',
+                        {value:dataa['人为'], name:'人为',
                             itemStyle: {
                                 normal: {
                                     color:"#005ea1"
                                 }
                             }},
-                        {value:1548, name:'其他',
+                        {value:dataa['其他'], name:'其他',
                             itemStyle: {
                                 normal: {
                                     color:"#0ad5ff"
@@ -1800,8 +2037,8 @@ function yingXiao(){
 
         myChart.setOption(option);
     });
-// 渠道分析
-    $(function(){
+// 故障类型分析
+    $(faultType=function(dataa){
         var myChart = echarts.init($("#rode01")[0]);
         option = {
 
@@ -1828,49 +2065,49 @@ function yingXiao(){
                     max: 40,                // for funnel
                     sort : 'ascending',     // for funnel
                     data:[
-                        {value:10, name:'摄像机',
+                        {value:dataa['摄像机'], name:'摄像机',
                             itemStyle: {
                                 normal: {
                                     color:"#45c0ff"
                                 }
                             }},
-                        {value:5, name:'监视器',
+                        {value:dataa['监视器'], name:'监视器',
                             itemStyle: {
                                 normal: {
                                     color:"#e15828"
                                 }
                             }},
-                        {value:15, name:'NVR',
+                        {value:dataa['NVR'], name:'NVR',
                             itemStyle: {
                                 normal: {
                                     color:"#ff81cb"
                                 }
                             }},
-                        {value:25, name:'拾音器',
+                        {value:dataa['拾音器'], name:'拾音器',
                             itemStyle: {
                                 normal: {
                                     color:"#2e7cff"
                                 }
                             }},
-                        {value:20, name:'报警',
+                        {value:dataa['报警'], name:'报警',
                             itemStyle: {
                                 normal: {
                                     color:"#feb602"
                                 }
                             }},
-                        {value:35, name:'门禁',
+                        {value:dataa['门禁'], name:'门禁',
                             itemStyle: {
                                 normal: {
                                     color:"#ff7d0a"
                                 }
                             }},
-                        {value:30, name:'电源',
+                        {value:dataa['电源'], name:'电源',
                             itemStyle: {
                                 normal: {
                                     color:"#1afffd"
                                 }
                             }},
-                        {value:40, name:'其他',
+                        {value:dataa['其他'], name:'其他',
                             itemStyle: {
                                 normal: {
                                     color:"#2e7cff"
@@ -1884,8 +2121,8 @@ function yingXiao(){
 
         myChart.setOption(option);
     });
-// 订退分析
-    $(function(){
+// 工单修复数
+    $(orderRepair=function(dataa){
         var myChart = echarts.init($("#bookAret")[0]);
         option = {
 
@@ -1913,15 +2150,15 @@ function yingXiao(){
                     type : 'category',
                     data : ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
                     axisLabel: {
-                    show: true,
-                    textStyle: {
-                        color: '#a4a7ab',
-                        align: 'center'
-                    },
-                    splitLine: {
-                        show: false
-                    },
-                }
+                        show: true,
+                        textStyle: {
+                            color: '#a4a7ab',
+                            align: 'center'
+                        },
+                        splitLine: {
+                            show: false
+                        },
+                    }
                 }
 
             ],
@@ -1944,7 +2181,7 @@ function yingXiao(){
                 {
                     name:'未修复数',
                     type:'bar',
-                    data:[100, 80, 136, 150, 120, 56, 200, 162, 105, 63, 169, 236],
+                    data:dataa['未修复'],
                     markPoint : {
                         data : [
                             {type : 'max', name: '最大值'},
@@ -1960,11 +2197,11 @@ function yingXiao(){
                 {
                     name:'已修复数',
                     type:'bar',
-                    data:[983, 820, 1236, 930, 1600, 1032, 890, 1300, 1921, 984, 1960, 2630],
+                    data:dataa['已修复'],
                     markPoint : {
                         data : [
-                            {name : '月最高', value : 2630, xAxis: 12, yAxis: 2630, symbolSize:18},
-                            {name : '月最低', value : 820, xAxis: 2, yAxis: 830}
+                            {type : 'max', name: '最大值'},
+                            {type : 'min', name: '最小值'}
                         ]
                     },
                     markLine : {
@@ -1979,8 +2216,9 @@ function yingXiao(){
 
         myChart.setOption(option);
     });
-// 按月进行趋势分析
-    $(function(){
+// 维修工单趋势
+    $(repairOrder=function(dataa){
+        console.log('维修工单趋势...')
         var myChart = echarts.init($("#bookBmonth")[0]);
         var option = {
             tooltip: {   //提示框，鼠标悬浮交互时的信息提示
@@ -2039,7 +2277,7 @@ function yingXiao(){
                     name: '',
                     type: 'line',
                     stack: '已修复数',
-                    data:[983, 820, 1236, 930, 1600, 1032, 890, 1300, 1921, 984, 1960, 2630],
+                    data:dataa,
                     itemStyle: {
                         normal: {
                             color: '#02bcbc'
@@ -2051,8 +2289,9 @@ function yingXiao(){
 
         myChart.setOption(option);
     });
-// 气候与订单分析
-    $(function(){
+// 气候与工单量分析
+    $(climateOrder=function(dataa){
+        console.log('气候与工单量分析...')
         var myChart = echarts.init($("#whearAbook")[0]);
         option = {
             tooltip : {
@@ -2128,7 +2367,7 @@ function yingXiao(){
                 {
                     name:'下雨',
                     type:'bar',
-                    data:[2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3],
+                    data:dataa['下雨'],
                     itemStyle: {
                         normal: {
                             color:"#0ad5ff"
@@ -2138,7 +2377,7 @@ function yingXiao(){
                 {
                     name:'下雪',
                     type:'bar',
-                    data:[2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3],
+                    data:dataa['下雪'],
                     itemStyle: {
                         normal: {
                             color:"#005ea1"
@@ -2148,7 +2387,7 @@ function yingXiao(){
                 {
                     name:'晴天',
                     type:'bar',
-                    data:[2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3],
+                    data:dataa['晴天'],
                     itemStyle: {
                         normal: {
                             color:"#2e7cff"
@@ -2159,7 +2398,7 @@ function yingXiao(){
                     name:'工单量',
                     type:'line',
                     yAxisIndex: 1,
-                    data:[2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2],
+                    data:dataa['工单量'],
                     itemStyle: {
                         normal: {
                             color:"#1afffd"
@@ -2171,8 +2410,9 @@ function yingXiao(){
 
         myChart.setOption(option);
     });
-// 交通与订单分析
-    $(function(){
+// 工单完成量与工程师分析
+    $(orderEngineer=function(dataa){
+        console.log('工单完成量与工程师分析...')
         var myChart = echarts.init($("#rodeAbook")[0]);
         option = {
             tooltip : {
@@ -2248,7 +2488,7 @@ function yingXiao(){
                     name:'有空',
                     type:'bar',
                     stack: '工程师',
-                    data:[120, 132, 101, 134, 90, 230, 210],
+                    data:dataa['有空'],
                     itemStyle: {
                         normal: {
                             color:"#ffcb89"
@@ -2259,7 +2499,7 @@ function yingXiao(){
                     name:'忙碌',
                     type:'bar',
                     stack: '工程师',
-                    data:[220, 232, 301, 234, 190, 330, 210],
+                    data:dataa['忙碌'],
                     itemStyle: {
                         normal: {
                             color:"#005ea1"
@@ -2271,7 +2511,7 @@ function yingXiao(){
                     name:'工单量',
                     type:'line',
                     yAxisIndex: 1,
-                    data:[320, 232, 101, 134, 290, 230, 210],
+                    data:dataa['工单量'],
                     itemStyle: {
                         normal: {
                             color:"#0ad5ff"
@@ -2283,8 +2523,8 @@ function yingXiao(){
 
         myChart.setOption(option);
     });
-// 季节与订单分析
-    $(function(){
+// 巡检工单行业分析
+    $(orderIndustry=function(dataa){
         var myChart = echarts.init($("#seaAbook01")[0]);
         option = {
 
@@ -2312,25 +2552,25 @@ function yingXiao(){
                     max: 40,                // for funnel
                     sort : 'ascending',     // for funnel
                     data:[
-                        {value:2560, name:'银行',
+                        {value:dataa['银行'], name:'银行',
                             itemStyle: {
                                 normal: {
                                     color:"#2e7cff"
                                 }
                             }},
-                        {value:3690, name:'教育',
+                        {value:dataa['教育'], name:'教育',
                             itemStyle: {
                                 normal: {
                                     color:"#ffcb89"
                                 }
                             }},
-                        {value:5690, name:'医疗',
+                        {value:dataa['医疗'], name:'医疗',
                             itemStyle: {
                                 normal: {
                                     color:"#005ea1"
                                 }
                             }},
-                        {value:6312, name:'其他',
+                        {value:dataa['其他'], name:'其他',
                             itemStyle: {
                                 normal: {
                                     color:"#0ad5ff"
@@ -2344,8 +2584,8 @@ function yingXiao(){
 
         myChart.setOption(option);
     });
-// 活动与订单分析
-    $(function(){
+// 平台活动与工单量分析
+    $(activityOrder=function(dataa){
         var myChart = echarts.init($("#actionBook")[0]);
         option = {
             tooltip : {
@@ -2399,7 +2639,7 @@ function yingXiao(){
                 {
                     name:'降价',
                     type:'bar',
-                    data:[320, 332, 301, 334, 390, 330, 320],
+                    data:dataa['降价'],
                     itemStyle: {
                         normal: {
                             color:"#2e7cff"
@@ -2411,7 +2651,7 @@ function yingXiao(){
                     type:'bar',
                     tooltip : {trigger: 'item'},
                     stack: '广告',
-                    data:[120, 132, 101, 134, 90, 230, 210],
+                    data:dataa['包年'],
                     itemStyle: {
                         normal: {
                             color:"#feb602"
@@ -2423,7 +2663,7 @@ function yingXiao(){
                     type:'bar',
                     tooltip : {trigger: 'item'},
                     stack: '广告',
-                    data:[220, 182, 191, 234, 290, 330, 310],
+                    data:dataa['账期'],
                     itemStyle: {
                         normal: {
                             color:"#ffcb89"
@@ -2435,7 +2675,7 @@ function yingXiao(){
                     type:'bar',
                     tooltip : {trigger: 'item'},
                     stack: '广告',
-                    data:[150, 232, 201, 154, 190, 330, 410],
+                    data:dataa['送积分'],
                     itemStyle: {
                         normal: {
                             color:"#005ea1"
@@ -2446,7 +2686,7 @@ function yingXiao(){
                 {
                     name:'订单趋势',
                     type:'line',
-                    data:[862, 1018, 964, 1026, 1679, 1600, 1570],
+                    data:dataa['订单趋势'],
                     itemStyle: {
                         normal: {
                             color:"#0ad5ff"
@@ -2471,25 +2711,25 @@ function yingXiao(){
                         }
                     },
                     data:[
-                        {value:1048, name:'降价',
+                        {value:dataa['降价总'], name:'降价',
                             itemStyle: {
                                 normal: {
                                     color:"#1afffd"
                                 }
                             }},
-                        {value:251, name:'包年',
+                        {value:dataa['包年总'], name:'包年',
                             itemStyle: {
                                 normal: {
                                     color:"#2e7cff"
                                 }
                             }},
-                        {value:147, name:'账期',
+                        {value:dataa['账期总'], name:'账期',
                             itemStyle: {
                                 normal: {
                                     color:"#ffcb89"
                                 }
                             }},
-                        {value:102, name:'送积分',
+                        {value:dataa['送积分总'], name:'送积分',
                             itemStyle: {
                                 normal: {
                                     color:"#005ea1"
@@ -2503,7 +2743,7 @@ function yingXiao(){
 
         myChart.setOption(option);
     });
-// 特殊时间点与订单分析
+// 工单二次维修数分析
     $(function(){
         var myChart = echarts.init($("#sperceBook01")[0]);
         option = {
@@ -2686,13 +2926,18 @@ function yingXiao(){
         myChart.setOption(option);
     });
 
-
 }
 
+var IncomeIndustry      // 收入行业分析
+var ProjectNumber       // 项目数量分析
+var IncomeComposition   // 收入总额组成
+var CostComposition     // 成本总额组成
+var IncomeAndCost       // 收入总额与成本总额
+
 function shouRu(){
-// 收入支出分析
-// 收入渠道分析
-    $(function(){
+// 项目信息分析
+// 收入行业分析
+    $(IncomeIndustry=function(dataa){
         var myChart = echarts.init($("#zhanbi02")[0]);
         var option = {
 
@@ -2707,7 +2952,7 @@ function shouRu(){
                 }
             },
             grid:{
-              borderWidth:0
+                borderWidth:0
             },
             xAxis : [
                 {
@@ -2758,7 +3003,7 @@ function shouRu(){
                     name:'渠道',
                     type:'bar',
                     stack: '总量',
-                    data:[2900, 1200, 300, 200, 900, 300],
+                    data:[dataa['总收入'], dataa['金融'], dataa['能源'], dataa['教育'], dataa['医疗'], dataa['文博']],
                     itemStyle: {
                         normal: {
                             color: '#2481ff'
@@ -2771,8 +3016,8 @@ function shouRu(){
 
         myChart.setOption(option);
     });
-// 支出渠道分析
-    $(function(){
+// 项目数量分析
+    $(ProjectNumber=function(dataa){
         var myChart = echarts.init($("#zhanbi03")[0]);
         option = {
 
@@ -2828,7 +3073,7 @@ function shouRu(){
                             color: '#1afffd'
                         }
                     },
-                    data:[0, 1700, 1400, 1200, 300, 0]
+                    data:dataa['总项目数']
                 },
                 {
                     name:'渠道',
@@ -2836,11 +3081,11 @@ function shouRu(){
                     stack: '总量',
                     itemStyle:{
                         normal:{
-                                color:'#28a3e1'
+                            color:'#28a3e1'
 
                         }
                     },
-                    data:[2900, 1200, 300, 200, 900, 300]
+                    data:dataa['渠道']
                 }
             ]
         };
@@ -2848,8 +3093,8 @@ function shouRu(){
 
         myChart.setOption(option);
     });
-// 营销投入与销售量分析
-    $(function(){
+// 营销投入与项目收入总额分析
+    $(IncomeComposition=function(dataa){
         var myChart = echarts.init($("#allAly01")[0]);
         option = {
             title : {
@@ -2883,7 +3128,7 @@ function shouRu(){
                     radius : '55%',
                     center: ['50%', '60%'],
                     data:[
-                        {value:335, name:'项目收入',
+                        {value:dataa['项目收入'], name:'项目收入',
                             itemStyle:{
                                 normal:{
                                     color:'#1afffd'
@@ -2891,28 +3136,28 @@ function shouRu(){
                                 }
                             }
                         },
-                        {value:310, name:'咨询评价',
+                        {value:dataa['咨询评价'], name:'咨询评价',
                             itemStyle:{
                                 normal:{
                                     color:'#2e7cff'
 
                                 }
                             }},
-                        {value:234, name:'备品备件',
+                        {value:dataa['备品备件'], name:'备品备件',
                             itemStyle:{
                                 normal:{
                                     color:'#ffcb89'
 
                                 }
                             }},
-                        {value:135, name:'其他收入',
+                        {value:dataa['其他收入'], name:'其他收入',
                             itemStyle:{
                                 normal:{
                                     color:'#005ea1'
 
                                 }
                             }},
-                        {value:1548, name:'增值业务',
+                        {value:dataa['增值业务'], name:'增值业务',
                             itemStyle:{
                                 normal:{
                                     color:'#0ad5ff'
@@ -2927,7 +3172,7 @@ function shouRu(){
 
         myChart.setOption(option);
     });
-    $(function(){
+    $(CostComposition=function(dataa){
         var myChart = echarts.init($("#allAly02")[0]);
         option = {
             title : {
@@ -2961,63 +3206,63 @@ function shouRu(){
                     radius : '55%',
                     center: ['50%', '60%'],
                     data:[
-                        {value:335, name:'金融',
+                        {value:dataa['金融'], name:'金融',
                             itemStyle:{
                                 normal:{
                                     color:'#06b8f8'
 
                                 }
                             }},
-                        {value:310, name:'能源',
+                        {value:dataa['能源'], name:'能源',
                             itemStyle:{
                                 normal:{
                                     color:'#ff5c58'
 
                                 }
                             }},
-                        {value:234, name:'教育',
+                        {value:dataa['教育'], name:'教育',
                             itemStyle:{
                                 normal:{
                                     color:'#ffffb3'
 
                                 }
                             }},
-                        {value:135, name:'医疗',
+                        {value:dataa['医疗'], name:'医疗',
                             itemStyle:{
                                 normal:{
                                     color:'#fee581'
 
                                 }
                             }},
-                        {value:1548, name:'文博',
+                        {value:dataa['文博'], name:'文博',
                             itemStyle:{
                                 normal:{
                                     color:'#1afffd'
 
                                 }
                             }},
-                        {value:135, name:'酒店',
+                        {value:dataa['酒店'], name:'酒店',
                             itemStyle:{
                                 normal:{
                                     color:'#1ec7f1'
 
                                 }
                             }},
-                        {value:135, name:'写字楼',
+                        {value:dataa['写字楼'], name:'写字楼',
                             itemStyle:{
                                 normal:{
                                     color:'#e15828'
 
                                 }
                             }},
-                        {value:135, name:'物业',
+                        {value:dataa['物业'], name:'物业',
                             itemStyle:{
                                 normal:{
                                     color:'#28a3e1'
 
                                 }
                             }},
-                        {value:135, name:'军队',
+                        {value:dataa['军队'], name:'军队',
                             itemStyle:{
                                 normal:{
                                     color:'#72e7d5'
@@ -3032,7 +3277,7 @@ function shouRu(){
 
         myChart.setOption(option);
     });
-    $(function(){
+    $(IncomeAndCost=function(dataa){
         var myChart = echarts.init($("#allAly03")[0]);
         option = {
             title : {
@@ -3092,7 +3337,7 @@ function shouRu(){
                 {
                     name:'成本总额',
                     type:'bar',
-                    data:[2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3],
+                    data:dataa['成本总额'],
                     itemStyle: {
                         normal: {
                             color: '#2481ff'
@@ -3113,7 +3358,7 @@ function shouRu(){
                 {
                     name:'收入总额',
                     type:'bar',
-                    data:[2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3],
+                    data:dataa['收入总额'],
                     itemStyle: {
                         normal: {
                             color: '#1afffd'
@@ -3122,8 +3367,8 @@ function shouRu(){
 
                     markPoint : {
                         data : [
-                            {name : '最高', value : 182.2, xAxis: 7, yAxis: 183, symbolSize:18},
-                            {name : '最低', value : 2.3, xAxis: 11, yAxis: 3}
+                            {name : '最高', type: 'max', xAxis: 7, yAxis: 183, symbolSize:18},
+                            {name : '最低', type: 'min', xAxis: 11, yAxis: 3}
                         ]
                     },
                     markLine : {
@@ -3140,9 +3385,11 @@ function shouRu(){
     });
 }
 
+
+
 function AnQuan(){
-    // 安全分析
-// 事件趋势分析
+// 服务商信息分析
+// 服务商数量分析
     $(function(){
         var myChart = echarts.init($("#shijian01")[0]);
         option = {
@@ -3213,7 +3460,7 @@ function AnQuan(){
 
         myChart.setOption(option);
     });
-// 事件级别分析
+// 服务商与工单类型倾向分析
     $(function(){
         var myChart = echarts.init($("#shijian02")[0]);
         var placeHoledStyle = {
@@ -3379,7 +3626,7 @@ function AnQuan(){
         };
         myChart.setOption(option);
     });
-// 事件类型分析
+// 服务商对行业兴趣分析
     $(function(){
         var myChart = echarts.init($("#shijian03")[0]);
         var labelTop = {
@@ -3529,7 +3776,7 @@ function AnQuan(){
         };
         myChart.setOption(option);
     });
-// 事发时间特征分析
+// 前24家服务商关注行业分析
     $(function(){
         var myChart = echarts.init($("#shijian04")[0]);
         option = {
