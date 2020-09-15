@@ -166,8 +166,8 @@ $(document).ready(function(){
 
     // 第五个(终端客户分析)页面 websocket连接与收数据部分
     console.log('建立连接5...');
-    var websocket4 = new WebSocket("ws://127.0.0.1:8990/ws");
-    websocket4.onopen = function(e) {
+    var websocket5 = new WebSocket("ws://127.0.0.1:8990/ws");
+    websocket5.onopen = function(e) {
         console.log('完成注册');
         var msg = {
             'content': '创建连接',
@@ -229,7 +229,42 @@ $(document).ready(function(){
 
     }
 
+    // 第六个(服务商信息分析)页面 websocket连接与收数据部分
+    console.log('建立连接6...')
+    var websocket6 = new WebSocket("ws://127.0.0.1:8990/ws");
+    websocket6.onopen = function(e) {
+        console.log('完成注册');
+        var msg = {
+            'content': '创建连接',
+            'sendTime': (new Date()).getTime(),
+            'spreadType': 'INITIAL',
+            'groupId': 'group0008',
+            'clientId': 'client0001',
+            'sendClientId': 'client0002'
+        }
+        websocket6.send(JSON.stringify(msg))
+    }
 
+    websocket6.onmessage = function(e) {
+        console.log(e.data)
+        // 把接下来的数据根据分类绑定到不同的echarts上即可
+        // 提供动态更新echarts的方式：
+        // 将 string 转化为 JSON
+        var data = JSON.parse(e.data)
+
+        // 活跃服务商趋势分析
+        var content1 = data['content1']
+        ActiveProvider(content1)
+        // 服务商与工单类型倾向分析
+        var content2 = data['content2']
+        ProviderAndOderType(content2)
+        // 服务商对行业兴趣分析
+        var content3 = data['content3']
+        ProviderIndustryInterest(content3)
+        // 前24家服务商关注行业分析
+        var content4 = data['content4']
+        ProviderAttentionIndustry(content4)
+    }
 })
 $(function(){
     // index();
@@ -3386,14 +3421,17 @@ function shouRu(){
 }
 
 
+var ActiveProvider              // 活跃服务商趋势分析
+var ProviderAndOderType         // 服务商与工单类型倾向分析
+var ProviderIndustryInterest      // 服务商对行业兴趣分析
+var ProviderAttentionIndustry   // 前24家服务商关注行业分析
 
 function AnQuan(){
 // 服务商信息分析
-// 服务商数量分析
-    $(function(){
+// 活跃服务商趋势分析
+    $(ActiveProvider=function(dataa){
         var myChart = echarts.init($("#shijian01")[0]);
         option = {
-
             tooltip: {
                 trigger: "item",
                 formatter: "{a} <br/>{b} : {c}"
@@ -3445,7 +3483,7 @@ function AnQuan(){
                 {
                     name: "活跃服务商趋势分析",
                     type: "line",
-                    data:[26, 59, 90, 26, 28, 70, 175, 182, 48, 188, 60, 23],
+                    data:dataa['服务商'],
                     itemStyle: {
                         normal: {
                             color:"#0aabff"
@@ -3461,7 +3499,7 @@ function AnQuan(){
         myChart.setOption(option);
     });
 // 服务商与工单类型倾向分析
-    $(function(){
+    $(ProviderAndOderType=function(dataa){
         var myChart = echarts.init($("#shijian02")[0]);
         var placeHoledStyle = {
             normal:{
@@ -3531,7 +3569,7 @@ function AnQuan(){
                     name:'非常感兴趣',
                     type:'bar',
                     stack: '总量',
-                    data:[38, 50, 33, 72],
+                    data:dataa['非常感兴趣'],
                     itemStyle: {
                         normal: {
                             color:"#1afffd"
@@ -3543,7 +3581,7 @@ function AnQuan(){
                     type:'bar',
                     stack: '总量',
                     itemStyle: placeHoledStyle,
-                    data:[62, 50, 67, 28],
+                    data:dataa['非常感兴趣'],
                     itemStyle: {
                         normal: {
                             color:"#2e7cff"
@@ -3555,7 +3593,7 @@ function AnQuan(){
                     type:'bar',
                     stack: '总量',
                     itemStyle : dataStyle,
-                    data:[61, 41, 42, 30],
+                    data:dataa['比较感兴趣'],
                     itemStyle: {
                         normal: {
                             color:"#ffcb89"
@@ -3567,7 +3605,7 @@ function AnQuan(){
                     type:'bar',
                     stack: '总量',
                     itemStyle: placeHoledStyle,
-                    data:[39, 59, 58, 70],
+                    data:dataa['比较感兴趣'],
                     itemStyle: {
                         normal: {
                             color:"#005ea1"
@@ -3579,7 +3617,7 @@ function AnQuan(){
                     type:'bar',
                     stack: '总量',
                     itemStyle : dataStyle,
-                    data:[37, 35, 44, 60],
+                    data:dataa['一般感兴趣'],
                     itemStyle: {
                         normal: {
                             color:"#0ad5ff"
@@ -3591,7 +3629,7 @@ function AnQuan(){
                     type:'bar',
                     stack: '总量',
                     itemStyle: placeHoledStyle,
-                    data:[63, 65, 56, 40],
+                    data:dataa['一般感兴趣'],
                     itemStyle: {
                         normal: {
                             color:"#e15828"
@@ -3603,7 +3641,7 @@ function AnQuan(){
                     type:'bar',
                     stack: '总量',
                     itemStyle : dataStyle,
-                    data:[71, 50, 31, 39],
+                    data:dataa['不感兴趣'],
                     itemStyle: {
                         normal: {
                             color:"#ff81cb"
@@ -3615,7 +3653,7 @@ function AnQuan(){
                     type:'bar',
                     stack: '总量',
                     itemStyle: placeHoledStyle,
-                    data:[29, 50, 69, 61],
+                    data:dataa['不感兴趣'],
                     itemStyle: {
                         normal: {
                             color:"#feb602"
@@ -3627,7 +3665,7 @@ function AnQuan(){
         myChart.setOption(option);
     });
 // 服务商对行业兴趣分析
-    $(function(){
+    $(ProviderIndustryInterest=function(dataa){
         var myChart = echarts.init($("#shijian03")[0]);
         var labelTop = {
             normal : {
@@ -3695,8 +3733,8 @@ function AnQuan(){
                     x: '0%', // for funnel
                     itemStyle : labelFromatter,
                     data : [
-                        {name:'解决', value:46, itemStyle : labelBottom},
-                        {name:'金融', value:54,itemStyle : labelTop}
+                        {name:'解决', value:dataa['解决'][0], itemStyle : labelBottom},
+                        {name:'金融', value:dataa['行业'][0],itemStyle : labelTop}
                     ],
                     itemStyle: {
                         normal: {
@@ -3711,8 +3749,8 @@ function AnQuan(){
                     x:'20%', // for funnel
                     itemStyle : labelFromatter,
                     data : [
-                        {name:'解决', value:56, itemStyle : labelBottom},
-                        {name:'能源', value:44,itemStyle : labelTop}
+                        {name:'解决', value:dataa['解决'][1], itemStyle : labelBottom},
+                        {name:'能源', value:dataa['能源'][1],itemStyle : labelTop}
                     ],
                     itemStyle: {
                         normal: {
@@ -3727,8 +3765,8 @@ function AnQuan(){
                     x:'40%', // for funnel
                     itemStyle : labelFromatter,
                     data : [
-                        {name:'解决', value:65, itemStyle : labelBottom},
-                        {name:'教育', value:35,itemStyle : labelTop}
+                        {name:'解决', value:dataa['解决'][2], itemStyle : labelBottom},
+                        {name:'教育', value:dataa['行业'][2],itemStyle : labelTop}
                     ],
                     itemStyle: {
                         normal: {
@@ -3743,8 +3781,8 @@ function AnQuan(){
                     x:'60%', // for funnel
                     itemStyle : labelFromatter,
                     data : [
-                        {name:'解决', value:70, itemStyle : labelBottom},
-                        {name:'医疗', value:30,itemStyle : labelTop}
+                        {name:'解决', value:dataa['解决'][3], itemStyle : labelBottom},
+                        {name:'医疗', value:dataa['行业'][3],itemStyle : labelTop}
 
                     ],
                     itemStyle: {
@@ -3763,8 +3801,8 @@ function AnQuan(){
                     x:'80%', // for funnel
                     itemStyle : labelFromatter,
                     data : [
-                        {name:'解决', value:70, itemStyle : labelBottom},
-                        {name:'其他', value:11,itemStyle : labelTop}
+                        {name:'解决', value:dataa['解决'][4], itemStyle : labelBottom},
+                        {name:'其他', value:dataa['行业'][4],itemStyle : labelTop}
                     ],
                     itemStyle: {
                         normal: {
@@ -3777,7 +3815,7 @@ function AnQuan(){
         myChart.setOption(option);
     });
 // 前24家服务商关注行业分析
-    $(function(){
+    $(ProviderAttentionIndustry=function(dataa){
         var myChart = echarts.init($("#shijian04")[0]);
         option = {
             tooltip : {
@@ -3828,7 +3866,7 @@ function AnQuan(){
                     type:'bar',
                     stack: '总量',
                     itemStyle : { normal: {label : {show: true, position: 'insideRight'}}},
-                    data: [12, 13, 10, 16, 19, 23, 21, 23, 20, 26, 27, 30,12, 12, 11, 14, 19, 23, 21, 20, 20, 25, 28, 30]
+                    data: dataa['金融']
                     ,
                     itemStyle: {
                         normal: {
@@ -3841,7 +3879,7 @@ function AnQuan(){
                     type:'bar',
                     stack: '总量',
                     itemStyle : { normal: {label : {show: true, position: 'insideRight'}}},
-                    data: [1, 13, 0, 16, 19, 23, 21, 23, 20, 26, 27, 30,12, 12, 11, 14, 19, 23, 21, 20, 0, 25, 8, 30]
+                    data: dataa['能源']
                     ,
                     itemStyle: {
                         normal: {
@@ -3854,7 +3892,7 @@ function AnQuan(){
                     type:'bar',
                     stack: '总量',
                     itemStyle : { normal: {label : {show: true, position: 'insideRight'}}},
-                    data: [12, 13, 10, 16, 19, 3, 2, 3, 0, 6, 9, 30,12, 12, 11, 14, 1, 3, 1, 2, 0, 5, 2, 0]
+                    data: dataa['教育']
                     ,
                     itemStyle: {
                         normal: {
@@ -3867,7 +3905,7 @@ function AnQuan(){
                     type:'bar',
                     stack: '总量',
                     itemStyle : { normal: {label : {show: true, position: 'insideRight'}}},
-                    data: [2, 13, 10, 6, 19, 23, 21, 3, 20, 6, 7, 30,12, 12, 11, 14, 19, 3, 21, 0, 20, 5, 8, 0]
+                    data: dataa['医疗']
                     ,
                     itemStyle: {
                         normal: {
@@ -3880,7 +3918,7 @@ function AnQuan(){
                     type:'bar',
                     stack: '总量',
                     itemStyle : { normal: {label : {show: true, position: 'insideRight'}}},
-                    data: [1, 3, 10, 6, 9, 3, 11, 3, 0, 6, 7, 0,2, 2, 1, 4, 9, 3, 1, 0, 0, 5, 8, 3]
+                    data: dataa['其他']
                     ,
                     itemStyle: {
                         normal: {
