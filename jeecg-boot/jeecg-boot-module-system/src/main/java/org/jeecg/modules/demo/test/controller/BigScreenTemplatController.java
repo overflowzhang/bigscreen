@@ -48,16 +48,4 @@ public class BigScreenTemplatController extends JeecgController<JeecgDemo, IJeec
         modelAndView.setViewName("/bigscreen/template1/index");
         return modelAndView;
     }
-
-    /**
-     * 智慧物流监控模版
-     * @param modelAndView
-     * @return
-     */
-    @RequestMapping("/index2")
-    public ModelAndView index2(ModelAndView modelAndView) {
-        modelAndView.setViewName("/bigscreen/template3/console");
-        return modelAndView;
-    }
-
 }

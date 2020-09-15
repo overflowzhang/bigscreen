@@ -1,0 +1,44 @@
+[
+  {
+    "content": "164号摄像机故障（陈浩）",
+    "corporation":"北京金城安防科技有限公司",
+    "locationText": "日月光鼎好大厦",
+    "latitude":116.404,
+    "longitude":39.915
+  },
+  {
+    "content": "报警系统故障（张正涛）",
+    "corporation":"北京安防帮科技有限公司",
+    "locationText": "顺义物流园区",
+    "latitude":136.404,
+    "longitude":59.915
+  },
+  {
+    "content": "监视器故障（李雪）",
+    "corporation":"北京安防维护公司",
+    "locationText": "中关村海龙大厦",
+    "latitude":130.404,
+    "longitude":40.915
+  },
+  {
+    "content": "银行营业网点巡检任务（刘红）",
+    "corporation":"北京易华录科技有限公司",
+    "locationText": "中国银行北京营业网点",
+    "latitude":116.404,
+    "longitude":59.915
+  },
+  {
+    "content": "NVR故障（陈浩）",
+    "corporation":"北京国双科技有限公司",
+    "locationText": "东城区国贸大厦",
+    "latitude":130.404,
+    "longitude":39.915
+  },
+  {
+    "content": "报警系统故障（张起国）",
+    "corporation":"北京安防维护维保公司",
+    "locationText": "地坛公园",
+    "latitude":106.404,
+    "longitude":49.915
+  }
+]

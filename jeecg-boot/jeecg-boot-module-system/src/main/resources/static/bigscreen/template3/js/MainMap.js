@@ -11,6 +11,95 @@ var layerUrl_cd_raster = "http://125.70.9.221:8020/cdmap/rest/services/BASEMAP/R
 var layerUrl_POI = "http://123.146.170.78:6080/arcgis/rest/services/SCPOI2/MapServer/1";
 var layerUrl_SC = "http://123.146.170.78:6080/arcgis/rest/services/SCPOI2/MapServer/";
 
+//维修和巡检消息列表
+$(document).ready(function(){
+    $.ajax({
+        url:'api/alarmMessageList',
+        type:'GET',
+        data:{
+            'pageNum':0,        //第几页
+            'pageSize':5,    // 每页数据数
+            'workOrderId':'sd',
+            'userName':'sd',
+            'projectId':'as'
+        },
+        success:function(dataStr){
+            var data=JSON.parse(dataStr)
+            var modelView=''
+            for(var i=0;i<data.length;i++){
+                modelView=modelView+'<div class="message_scroll">'+
+                    '<div class="scroll_top">'+
+                    '<span class="scroll_title">'+data[i].type+'</span>'+
+                    '<span class="scroll_level scroll_level01">'+data[i].level+'</span>'+
+                    '<a class="localize" onclick="taskLocation('+data[i].latitude+','+data[i].longitude+')"'+'></a>'+
+                    '<span class="scroll_timer">'+data[i].dataTime+'</span>'+
+                    '</div>'+
+                    '<div class="msg_cage">'+
+                    '<a class="localize_title">'+data[i].content+'</a>'+
+                    '</div>'+
+                    '<div class="msg_cage">'+
+                    '<a class="localize_title">'+data[i].corporation+'</a>'+
+                    '</div>'+
+                    '</div>'
+            }
+            $("#message_scroll_box_id").empty();
+            $("#message_scroll_box_id").append(modelView);
+            // <div class="message_scroll">
+            //     <div class="scroll_top">
+            //         <span class="scroll_title">维修维保工单</span>
+            //         <span class="scroll_level scroll_level01">一级</span>
+            //         <a class="localize" onclick="taskLocation()"></a>
+            //         <span class="scroll_timer">19-12-5/12:52</span>
+            //     </div>
+            //     <div class="msg_cage">
+            //         <a class="localize_title">海淀区西土城路9号，123号摄像机需要维修。</a>
+            //     </div>
+            //     <div class="msg_cage">
+            //         <a class="localize_msg">平安银行-海淀区支行</a>
+            //     </div>
+            // </div>
+        }
+    })
+})
+
+//服务商列表
+$(document).ready(function(){
+    $.ajax({
+        url:'api/activeFacilitatorList',
+        type:'GET',
+        data:{
+            'pageNum':0,        //第几页
+            'pageSize':5,    // 每页数据数
+            'level':0
+        },
+        success:function(dataStr){
+            var data=JSON.parse(dataStr)
+            var modelView=''
+            for(var i=0;i<data.length;i++){
+                modelView=modelView+'<tr>'+
+                    '<td>'+data[i].facilitatorName+'</td>'+
+                    '<td>'+data[i].socialCode+'</td>'+
+                    '<td>'+data[i].qualificationLevel+'</td>'+
+                    '<td>'+data[i].industrySector+'</td>'+
+                    '<td>'+data[i].engineerNum+'</td>'+
+                    '<td>'+
+                    '<a style="width: 60px;height: 20px;display: block;text-align: center;line-height: 20px;margin: 0;" onclick="showCarDetai()"'+'>查看详情</a>'+
+                    '<a style="width: 60px;height: 20px;display: block;text-align: center;line-height: 20px;margin: 0;" onclick="taskLocation('+data[i].latitude+','+data[i].longitude+')"'+'>公司位置</a>'+
+                    '</td>'+
+                    '</tr>'
+            }
+            $("#active_facilitator_list").empty();
+            $("#active_facilitator_list").append(modelView);
+        // <tr>
+        //     <td>中国通信建设集团有限公司</td>
+        //     <td>91110000100009606Y</td>
+        //     <td>安防工程企业设计施工维护能力证书-壹级</td>
+        //     <td>通信、信息化</td>
+        //     <td>5000</td>
+        // </tr>
+        }
+    })
+})
 
 
 dojoConfig = {
@@ -283,8 +372,225 @@ function zoomIn() {
     if (zm > 4)
         map.setZoom(zm);
 }
+//倒退视图
+function backwardMap(){
+    map.panBy(200,0)
+}
+function forwardMap(){
+    map.panBy(-200,0)
+}
+//专题地图
+function topicsMap(){
+    var layerList= document.getElementsByClassName("display_type_chose");
+    var filterText=[]
+    for(var i=0;i<layerList.length;i++){
+        if(layerList[i].checked){
+            filterText.push(layerList[i].nextSibling.data)
+        }
+    }
+    console.log(filterText)
+    //多关键字检索
+    var local = new BMap.LocalSearch(map, {
+        renderOptions:{map: map}
+    });
+    local.searchInBounds(filterText, map.getBounds());
+}
+//城市定位地图
+function cityLocationMap(){
+    var layerList= document.getElementsByClassName("display_city_chose");
+    var cityName=null
+    for(var i=0;i<layerList.length;i++){
+        if(layerList[i].checked){
+            cityName=layerList[i].nextSibling.data
+            break
+        }
+    }
+    map.centerAndZoom(cityName,11);
+}
+//地址检索
+function addressSearch(){
+    $.ajax({
+        url:'api/addressSearch',
+        type:'GET',
+        data:{
+            'pageNum':0,        //第几页
+            'pageSize':5,    // 每页数据数
+            'addressType':'abc',
+            'addressName':'as'
+        },
+        success:function(dataStr){
+            var data=JSON.parse(dataStr)
+            var modelView=''
+            for(var i=0;i<data.length;i++){
+                modelView=modelView+'<ul  class="search_result">'+
+                    '<li class="search_result_add">'+data[i].corporation+'</li>'+
+                    '<li class="search_location" title="定位" onclick="taskLocation('+data[i].latitude+','+data[i].longitude+')"'+'></li>'+
+                    '<li class="search_eddit" title="操作"></li>'+
+                    '<li class="search_result_road">'+data[i].locationText+'</li>'+
+                    '</ul>'
+            }
+            $("#address_search_result").empty();
+            $("#address_search_result").append(modelView);
+        // <#list addressSearchResult as item>
+        //     <ul  class="search_result">
+        //         <li class="search_result_add">${item.corporation}</li>
+        //         <li class="search_location" title="定位" onclick="taskLocation(this,${item.latitude},${item.longitude})"></li>
+        //         <li class="search_eddit" title="操作"></li>
+        //         <li class="search_result_road">${item.locationText}</li>
+        //     </ul>
+        // </#list>
+        }
+    })
+}
+//危化品检索
+function chemicalsSearch (){
+    $.ajax({
+        url:'api/chemicalSearch',
+        type:'GET',
+        data:{
+            'pageNum':0,        //第几页
+            'pageSize':5,    // 每页数据数
+            'codeType':'abc',
+            'codeValue':'as'
+        },
+        success:function(dataStr){
+            var data=JSON.parse(dataStr)
+            var modelView=''
+            for(var i=0;i<data.length;i++){
+                modelView=modelView+'<ul  class="search_result">'+
+                    '<li class="search_result_add danger_result">'+data[i].content+'</li>'+
+                    '<li class="danger_level level03">'+data[i].dangerLevel+'</li>'+
+                    '<li class="search_location" title="定位" onclick="taskLocation('+data[i].latitude+','+data[i].longitude+')"'+'></li>'+
+                    '<li class="search_eddit" title="生命周期" onclick="showLife()"'+'></li>'+
+                    '<li class="search_result_car car_personal">'+data[i].corporation+'</li>'+
+                    '<li class="search_result_car car_time">'+data[i].locationText+'</li>'+
+                    '</ul>'
+            }
+            $("#chemical_search_result").empty();
+            $("#chemical_search_result").append(modelView);
+        // <ul  class="search_result">
+        //     <li class="search_result_add danger_result">164号摄像机故障</li>
+        //     <li class="danger_level level03">三级</li>
+        //     <li class="search_location" title="定位"></li>
+        //     <li class="search_eddit" title="生命周期" onclick="showLife()"></li>
+        //     <li class="search_result_car car_personal">北京金城安防科技有限公司</li>
+        //     <li class="search_result_car car_time">日月光鼎好大厦</li>
+        //  </ul>
+        }
+    })
+}
+//企业检索
+function corporationsSearch() {
+    $.ajax({
+        url:'api/corporationsSearch',
+        type:'GET',
+        data:{
+            'pageNum':0,        //第几页
+            'pageSize':5,    // 每页数据数
+            'corporationType':'sd',
+            'corporationName':'sd',
+            'codeValue':'as'
+        },
+        success:function(dataStr){
+            var data=JSON.parse(dataStr)
+            var modelView=''
+            for(var i=0;i<data.length;i++){
+                modelView=modelView+'<ul  class="search_result">'+
+                    '<li class="search_result_add">'+data[i].corporation+'</li>'+
+                    '<li class="search_location" title="定位" onclick="taskLocation('+data[i].latitude+','+data[i].longitude+')"'+'></li>'+
+                    '<li class="search_eddit" title="操作" onclick="people()"'+'></li>'+
+                    '<li class="search_result_road">'+data[i].locationText+'</li>'+
+                    '</ul>'
+            }
+            $("#corporation_search_result").empty();
+            $("#corporation_search_result").append(modelView);
+        // <ul  class="search_result">
+        //     <li class="search_result_add">中国银行总部（350298100000405）</li>
+        //     <li class="search_location" title="定位"></li>
+        //     <li class="search_eddit" onclick="people()" title="操作"></li>
+        //     <li class="search_result_road">北京市>西城区>复兴门内大街1号</li>
+        // </ul>
+        }
+    })
+}
+//工单检索
+function workOrdersSearch() {
+    $.ajax({
+        url:'api/workOrdersSearch',
+        type:'GET',
+        data:{
+            'pageNum':0,        //第几页
+            'pageSize':5,    // 每页数据数
+            'workOrderId':'sd',
+            'userName':'sd',
+            'projectId':'as'
+        },
+        success:function(dataStr){
+            var data=JSON.parse(dataStr)
+            var modelView=''
+            for(var i=0;i<data.length;i++){
+                modelView=modelView+'<ul  class="search_result">'+
+                    '<li class="search_result_add">'+data[i].content+'</li>'+
+                    '<li class="search_location" title="定位" onclick="taskLocation('+data[i].latitude+','+data[i].longitude+')"'+'></li>'+
+                    '<li class="search_guiji" title="轨迹回放"'+'></li>'+
+                    '<li class="search_result_car car_personal">'+data[i].corporation+'</li>'+
+                    '<li class="search_result_car car_time">'+data[i].locationText+'</li>'+
+                    '</ul>'
+            }
+            $("#workOrders_search_result").empty();
+            $("#workOrders_search_result").append(modelView);
+        // <ul  class="search_result">
+        //     <li class="search_result_add">164号摄像机故障（陈浩）</li>
+        //     <li class="search_location" title="定位"></li>
+        //     <li class="search_guiji"  title="轨迹回放"></li>
+        //     <li class="search_result_car car_personal">北京金城安防科技有限公司</li>
+        //     <li class="search_result_car car_time">日月光鼎好大厦</li>
+        // </ul>
+        }
+    })
+}
+//地图菜单栏的搜索按钮
+function keyNameSearch(){
+    console.log("hello")
+    var poi = new BMap.Point(116.307852,40.057031);
+    map.centerAndZoom(poi, 16);
+    map.enableScrollWheelZoom();
 
+    var content = '<div style="margin:0;line-height:20px;padding:2px;">' +
+        '<img src="../img/baidu.jpg" alt="" style="float:right;zoom:1;overflow:hidden;width:100px;height:100px;margin-left:3px;"/>' +
+        '地址：北京市海淀区上地十街10号<br/>电话：(010)59928888<br/>简介：百度大厦位于北京市海淀区西二旗地铁站附近，为百度公司综合研发及办公总部。' +
+        '</div>';
 
+    //创建检索信息窗口对象
+    var searchInfoWindow = null;
+    searchInfoWindow = new BMapLib.SearchInfoWindow(map, content, {
+        title  : "百度大厦",      //标题
+        width  : 290,             //宽度
+        height : 105,              //高度
+        panel  : "panel",         //检索结果面板
+        enableAutoPan : true,     //自动平移
+        searchTypes   :[
+            BMAPLIB_TAB_SEARCH,   //周边检索
+            BMAPLIB_TAB_TO_HERE,  //到这里去
+            BMAPLIB_TAB_FROM_HERE //从这里出发
+        ]
+    });
+    var marker = new BMap.Marker(poi); //创建marker对象
+    marker.enableDragging(); //marker可拖拽
+    marker.addEventListener("click", function(e){
+        searchInfoWindow.open(marker);
+    })
+    map.addOverlay(marker); //在地图中添加marker
+}
+//维修巡检任务工单定位
+function taskLocation(latitude,longitude){
+    console.log(latitude+" "+longitude)
+    var point = new BMap.Point(latitude, longitude);
+    map.centerAndZoom(point, 15);
+    var marker = new BMap.Marker(point);
+    map.addOverlay(marker);
+    marker.setAnimation(BMAP_ANIMATION_BOUNCE);
+}
 
 //-----------------------------------------城市定位------------------------------
 

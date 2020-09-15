@@ -1,0 +1,56 @@
+[
+  {
+    "facilitatorName": "中国通信建设集团有限公司",
+    "socialCode": "91110000100009606Y",
+    "qualificationLevel": "安防工程企业设计施工维护能力证书-壹级",
+    "industrySector": "通信、信息化",
+    "engineerNum": 5000,
+    "latitude":80.404,
+    "longitude":35.915
+  },
+  {
+    "facilitatorName": "北京金城安防科技有限公司",
+    "socialCode": "91110003250009606Y",
+    "qualificationLevel": "安防工程企业设计施工维护能力证书-贰级",
+    "industrySector": "安防维护",
+    "engineerNum": 200,
+    "latitude":80.404,
+    "longitude":35.915
+  },
+  {
+    "facilitatorName": "北京电气化工程有限公司",
+    "socialCode": "91234000100003206Y",
+    "qualificationLevel": "安防工程企业设计施工维护能力证书-三级",
+    "industrySector": "通信、信息化",
+    "engineerNum": 1000,
+    "latitude":80.404,
+    "longitude":35.915
+  },
+  {
+    "facilitatorName": "北京易华录网络科技有限公司",
+    "socialCode": "91962000100009606Y",
+    "qualificationLevel": "安防工程企业设计施工维护能力证书-壹级",
+    "industrySector": "通信、信息化",
+    "engineerNum": 5000,
+    "latitude":80.404,
+    "longitude":35.915
+  },
+  {
+    "facilitatorName": "中国电子科技集团太极网络科技有限公司",
+    "socialCode": "91193000100009606Y",
+    "qualificationLevel": "安防工程企业设计施工维护能力证书-贰级",
+    "industrySector": "电子、信息化",
+    "engineerNum": 4000,
+    "latitude":80.404,
+    "longitude":35.915
+  },
+  {
+    "facilitatorName": "北京国双科技有限公司",
+    "socialCode": "91520000100009606Y",
+    "qualificationLevel": "安防工程企业设计施工维护能力证书-壹级",
+    "industrySector": "大数据、信息化",
+    "engineerNum": 700,
+    "latitude":80.404,
+    "longitude":35.915
+  }
+]

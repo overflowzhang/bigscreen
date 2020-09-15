@@ -102,63 +102,7 @@
                 <div class="dataAllBorder01 cage_cl" style="margin-top: 1.5% !important; height: 32%; position: relative;">
                     <div class="dataAllBorder02" style="padding: 1.2%; overflow: hidden">
 
-                        <div class="message_scroll_box">
-                            <div class="message_scroll">
-                            <div class="scroll_top">
-                                <span class="scroll_title">维修维保工单</span>
-                                <span class="scroll_level scroll_level01">一级</span>
-                                <a class="localize"></a>
-                                <span class="scroll_timer">19-12-5/12:52</span>
-                            </div>
-                            <div class="msg_cage">
-                                <a class="localize_title">海淀区西土城路9号，123号摄像机需要维修。</a>
-                            </div>
-                            <div class="msg_cage">
-                                <a class="localize_msg">平安银行-海淀区支行</a>
-                            </div>
-                        </div>
-                            <div class="message_scroll">
-                                <div class="scroll_top">
-                                    <span class="scroll_title">维修维保工单</span>
-                                    <span class="scroll_level scroll_level03">三级</span>
-                                    <a class="localize"></a>
-                                    <span class="scroll_timer">19-12-2/9:22</span>
-                                </div>
-                                <div class="msg_cage">
-                                    <a class="localize_title">朝阳区大望路23号，NVR工作不正常。</a>
-                                </div>
-                                <div class="msg_cage">
-                                    <a class="localize_msg">中信银行-朝阳支行</a>
-                                </div>
-                            </div>
-                            <div class="message_scroll">
-                                <div class="scroll_top">
-                                    <span class="scroll_title">巡检任务工单</span>
-                                    <span class="scroll_level scroll_level02">二级</span>
-                                    <a class="localize"></a>
-                                    <span class="scroll_timer">19-12-1/10:32</span>
-                                </div>
-                                <div class="msg_cage">
-                                    <a class="localize_title">医院全部安防设备及系统进行逐项化巡检。</a>
-                                </div>
-                                <div class="msg_cage">
-                                    <a class="localize_msg">中日友好医院</a>
-                                </div>
-                            </div>
-                            <div class="message_scroll">
-                                <div class="scroll_top">
-                                    <span class="scroll_title">巡检任务工单</span>
-                                    <span class="scroll_level scroll_level01">一级</span>
-                                    <a class="localize"></a>
-                                    <span class="scroll_timer">19-12-6/8:32</span>
-                                </div>
-                                <div class="msg_cage">
-                                    <a class="localize_title">当前安防系统正常工作设备占比低，急需对全校安防设备及系统进行巡检。</a>
-                                </div>
-                                <div class="msg_cage">
-                                    <a class="localize_msg">北师大三附中</a>
-                                </div>
-                            </div>
+                        <div class="message_scroll_box" id="message_scroll_box_id">
                         </div>
 
                     </div>
@@ -184,54 +128,54 @@
                         <div class="display_type_box display_box" style="display: none;overflow:auto">
                             <div class="display_type_center_box">
                                 <ul class="display_type_inner_box" id="layerList">
-                                    <li class="display_type_msg"><input id="zt_4" type="checkbox" class="display_type_chose"/>银行</li>
-                                    <li class="display_type_msg"><input id="zt_1" type="checkbox" class="display_type_chose"/>仓库</li>
-                                    <li class="display_type_msg"><input id="zt_5" type="checkbox" class="display_type_chose"/>学校</li>
-                                    <li class="display_type_msg"><input id="zt_6" type="checkbox" class="display_type_chose"/>医院</li>
-                                    <li class="display_type_msg"><input id="zt_2" type="checkbox" class="display_type_chose"/>加油站</li>
-                                    <li class="display_type_msg"><input id="zt_0" type="checkbox" class="display_type_chose"/>停车场</li>
-                                    <li class="display_type_msg"><input id="zt_3" type="checkbox" class="display_type_chose"/>博物馆</li>
-                                    <li class="display_type_msg"><input id="zt_7" type="checkbox" class="display_type_chose"/>音乐厅</li>
+                                    <li class="display_type_msg"><input id="zt_4" type="checkbox" class="display_type_chose" name="display_type_chose[]"/>银行</li>
+                                    <li class="display_type_msg"><input id="zt_1" type="checkbox" class="display_type_chose" name="display_type_chose[]"/>仓库</li>
+                                    <li class="display_type_msg"><input id="zt_5" type="checkbox" class="display_type_chose" name="display_type_chose[]"/>学校</li>
+                                    <li class="display_type_msg"><input id="zt_6" type="checkbox" class="display_type_chose" name="display_type_chose[]"/>医院</li>
+                                    <li class="display_type_msg"><input id="zt_2" type="checkbox" class="display_type_chose" name="display_type_chose[]"/>加油站</li>
+                                    <li class="display_type_msg"><input id="zt_0" type="checkbox" class="display_type_chose" name="display_type_chose[]"/>停车场</li>
+                                    <li class="display_type_msg"><input id="zt_3" type="checkbox" class="display_type_chose" name="display_type_chose[]"/>博物馆</li>
+                                    <li class="display_type_msg"><input id="zt_7" type="checkbox" class="display_type_chose" name="display_type_chose[]"/>音乐厅</li>
                                     <li class="display_type_msg">----------------------------------</li>
-                                    <li class="display_type_msg"><input id="zt_14" type="checkbox" class="display_type_chose" />维修维护</li>
-                                    <li class="display_type_msg"><input id="zt_11" type="checkbox" class="display_type_chose" />安防设备</li>
-                                    <li class="display_type_msg"><input id="zt_13" type="checkbox" class="display_type_chose" />安防系统</li>
-                                    <li class="display_type_msg"><input id="zt_12" type="checkbox" class="display_type_chose" />消防系统</li>
+                                    <li class="display_type_msg"><input id="zt_14" type="checkbox" class="display_type_chose" name="display_type_chose[]"/>维修维护</li>
+                                    <li class="display_type_msg"><input id="zt_11" type="checkbox" class="display_type_chose" name="display_type_chose[]"/>安防设备</li>
+                                    <li class="display_type_msg"><input id="zt_13" type="checkbox" class="display_type_chose" name="display_type_chose[]"/>安防系统</li>
+                                    <li class="display_type_msg"><input id="zt_12" type="checkbox" class="display_type_chose" name="display_type_chose[]"/>消防系统</li>
                                 </ul>
                             </div>
-                            <div class="display_type_funct_box">
-                                <span class="display_type_funct display_type_funct_sure">确定</span>
+                            <div class="display_type_funct_box" onclick="topicsMap()">
+                                <span class="display_type_funct display_type_funct_sure" onclick="topicsMap">确定</span>
                             </div>
                         </div>
                         <!--城市选择-->
                         <div class="city_chose_box display_box" style="display: none">
                             <div class="display_type_center_box">
                                 <ul class="display_type_inner_box" id="ulCity">
-                                    <li class="display_type_msg"> 北京市</li>
-                                    <li class="display_type_msg">天津市</li>
-                                    <li class="display_type_msg">重庆市</li>
-                                    <li class="display_type_msg">海南省</li>
-                                    <li class="display_type_msg">浙江省</li>
-                                    <li class="display_type_msg">江苏省</li>
-                                    <li class="display_type_msg">广东省</li>
-                                    <li class="display_type_msg">新疆</li>
-                                    <li class="display_type_msg">西藏</li>
-                                    <li class="display_type_msg">湖南省</li>
-                                    <li class="display_type_msg">湖北省</li>
-                                    <li class="display_type_msg">四川省</li>
-                                    <li class="display_type_msg">河北省</li>
-                                    <li class="display_type_msg">河南省</li>
-                                    <li class="display_type_msg">山东省</li>
-                                    <li class="display_type_msg">雅安市</li>
-                                    <li class="display_type_msg">眉山市</li>
-                                    <li class="display_type_msg">资阳市</li>
-                                    <li class="display_type_msg">阿坝州</li>
-                                    <li class="display_type_msg">安徽省</li>
-                                    <li class="display_type_msg">凉山州</li>
+                                    <li class="display_type_msg"><input id="zt_4" type="radio" class="display_city_chose" name="display_city_chose"/>北京市</li>
+                                    <li class="display_type_msg"><input id="zt_5" type="radio" class="display_city_chose" name="display_city_chose"/>天津市</li>
+                                    <li class="display_type_msg"><input id="zt_6" type="radio" class="display_city_chose" name="display_city_chose"/>重庆市</li>
+                                    <li class="display_type_msg"><input id="zt_7" type="radio" class="display_city_chose" name="display_city_chose"/>海南省</li>
+                                    <li class="display_type_msg"><input id="zt_8" type="radio" class="display_city_chose" name="display_city_chose"/>浙江省</li>
+                                    <li class="display_type_msg"><input id="zt_9" type="radio" class="display_city_chose" name="display_city_chose"/>江苏省</li>
+                                    <li class="display_type_msg"><input id="zt_10" type="radio" class="display_city_chose" name="display_city_chose"/>广东省</li>
+                                    <li class="display_type_msg"><input id="zt_11" type="radio" class="display_city_chose" name="display_city_chose"/>新疆</li>
+                                    <li class="display_type_msg"><input id="zt_12" type="radio" class="display_city_chose" name="display_city_chose"/>西藏</li>
+                                    <li class="display_type_msg"><input id="zt_13" type="radio" class="display_city_chose" name="display_city_chose"/>湖南省</li>
+                                    <li class="display_type_msg"><input id="zt_14" type="radio" class="display_city_chose" name="display_city_chose"/>湖北省</li>
+                                    <li class="display_type_msg"><input id="zt_15" type="radio" class="display_city_chose" name="display_city_chose"/>四川省</li>
+                                    <li class="display_type_msg"><input id="zt_16" type="radio" class="display_city_chose" name="display_city_chose"/>河北省</li>
+                                    <li class="display_type_msg"><input id="zt_17" type="radio" class="display_city_chose" name="display_city_chose"/>河南省</li>
+                                    <li class="display_type_msg"><input id="zt_18" type="radio" class="display_city_chose" name="display_city_chose"/>山东省</li>
+                                    <li class="display_type_msg"><input id="zt_19" type="radio" class="display_city_chose" name="display_city_chose"/>雅安市</li>
+                                    <li class="display_type_msg"><input id="zt_20" type="radio" class="display_city_chose" name="display_city_chose"/>眉山市</li>
+                                    <li class="display_type_msg"><input id="zt_21" type="radio" class="display_city_chose" name="display_city_chose"/>资阳市</li>
+                                    <li class="display_type_msg"><input id="zt_22" type="radio" class="display_city_chose" name="display_city_chose"/>阿坝州</li>
+                                    <li class="display_type_msg"><input id="zt_23" type="radio" class="display_city_chose" name="display_city_chose"/>安徽省</li>
+                                    <li class="display_type_msg"><input id="zt_24" type="radio" class="display_city_chose" name="display_city_chose"/>凉山州</li>
                                 </ul>
                             </div>
                             <div class="display_type_funct_box">
-                                <span class="display_type_funct display_type_funct_sure">确定</span>
+                                <span class="display_type_funct display_type_funct_sure" onclick="cityLocationMap()">确定</span>
                             </div>
                         </div>
                         <!--轨迹回放-->
@@ -271,10 +215,10 @@
                             <span class="map_tool" onclick="zoomIn()">
                                     <a class="map_tool_inner" title="缩小" style="background-position-x:-72px"></a>
                                 </span>
-                            <span class="map_tool" onclick="showHeatMap()">
+                            <span class="map_tool" onclick="backwardMap()">
                                     <a class="map_tool_inner" title="倒退视图" style="background-position-x:-108px"></a>
                                 </span>
-                            <span class="map_tool">
+                            <span class="map_tool" onclick="forwardMap()">
                                     <a class="map_tool_inner" title="前进视图" style="background-position-x:-144px"></a>
                                 </span>
                             <span class="map_tool">
@@ -299,7 +243,7 @@
                                     <a class="map_tool_inner car_check_btn check_btn" onclick="carCheck()" title="工单检索"  style="background-position-x:-360px"></a>
                                 </span>
                             <span class="map_tool">
-                                    <a class="map_tool_inner" onclick="Search()" title="搜索" style="background-position-x:-468px"></a>
+                                    <a class="map_tool_inner" onclick="keyNameSearch()" title="搜索" style="background-position-x:-468px"></a>
                                 </span>
                             <span class="map_tool">
                                     <a class="map_tool_inner" onclick="cancel()" id="fresh_tool" title="清空" style="background-position-x:-396px"></a>
@@ -327,7 +271,7 @@
                             </div>
                         </div>
                         <table id="table" style="width: 100%">
-                            <tbody>
+                            <tbody id="active_facilitator_list">
                             <tr>
                                 <td>中国通信建设集团有限公司</td>
                                 <td>91110000100009606Y</td>
@@ -715,46 +659,10 @@
                                 <li class="search_title">地址名称：</li>
                                 <li class="search_input_box"><input class="search_input" type="text"></li>
                             </ul>
-                            <button class="search_btn">开始检索</button>
+                            <button class="search_btn" onclick="addressSearch()">开始检索</button>
                         </div>
                         <!--检索结果板块-->
-                        <div class="search_sesult_box">
-                            <ul  class="search_result">
-                                <li class="search_result_add">中信银行海淀区支行</li>
-                                <li class="search_location" title="定位"></li>
-                                <li class="search_eddit" title="操作"></li>
-                                <li class="search_result_road">北京市>海淀区>西土城路20号</li>
-                            </ul>
-                            <ul  class="search_result">
-                                <li class="search_result_add">中日友好医院</li>
-                                <li class="search_location" title="定位"></li>
-                                <li class="search_eddit" title="操作"></li>
-                                <li class="search_result_road">北京市>朝阳区>樱花园东街2号</li>
-                            </ul>
-                            <ul  class="search_result">
-                                <li class="search_result_add">国家会议中心</li>
-                                <li class="search_location" title="定位"></li>
-                                <li class="search_eddit" title="操作"></li>
-                                <li class="search_result_road">北京市>朝阳区>北辰西路8号院</li>
-                            </ul>
-                            <ul  class="search_result">
-                                <li class="search_result_add">北京邮电大学</li>
-                                <li class="search_location" title="定位"></li>
-                                <li class="search_eddit" title="操作"></li>
-                                <li class="search_result_road">北京市>海淀区>西土城路10号</li>
-                            </ul>
-                            <ul  class="search_result">
-                                <li class="search_result_add">国家图书馆</li>
-                                <li class="search_location" title="定位"></li>
-                                <li class="search_eddit" title="操作"></li>
-                                <li class="search_result_road">北京市>海淀区>中关村南大街33号</li>
-                            </ul>
-                            <ul  class="search_result">
-                                <li class="search_result_add">鼎好大厦</li>
-                                <li class="search_location" title="定位"></li>
-                                <li class="search_eddit" title="操作"></li>
-                                <li class="search_result_road">北京市>海淀区>海淀大街3-4号</li>
-                            </ul>
+                        <div class="search_sesult_box" id="address_search_result">
                         </div>
                         <!--翻页模块-->
                         <div class="tcdPageCode"></div>
@@ -776,58 +684,10 @@
                                 <li class="search_title">输入编码：</li>
                                 <li class="search_input_box"><input class="search_input" type="text"></li>
                             </ul>
-                            <button class="search_btn">开始检索</button>
+                            <button class="search_btn" onclick="chemicalsSearch()">开始检索</button>
                         </div>
                         <!--检索结果板块-->
-                        <div class="search_sesult_box">
-                            <ul  class="search_result">
-                                <li class="search_result_add danger_result">164号摄像机故障</li>
-                                <li class="danger_level level03">三级</li>
-                                <li class="search_location" title="定位"></li>
-                                <li class="search_eddit" title="生命周期" onclick="showLife()"></li>
-                                <li class="search_result_car car_personal">北京金城安防科技有限公司</li>
-                                <li class="search_result_car car_time">日月光鼎好大厦</li>
-                            </ul>
-                            <ul  class="search_result">
-                                <li class="search_result_add danger_result">报警系统故障</li>
-                                <li class="danger_level level03">三级</li>
-                                <li class="search_location" title="定位"></li>
-                                <li class="search_eddit" title="生命周期"></li>
-                                <li class="search_result_car car_personal">北京安防帮科技有限公司</li>
-                                <li class="search_result_car car_time">顺义物流园区</li>
-                            </ul>
-                            <ul  class="search_result">
-                                <li class="search_result_add danger_result">监视器故障</li>
-                                <li class="danger_level level02">二级</li>
-                                <li class="search_location" title="定位"></li>
-                                <li class="search_eddit" title="生命周期"></li>
-                                <li class="search_result_car car_personal">北京安防维护公司</li>
-                                <li class="search_result_car car_time">中关村海龙大厦</li>
-                            </ul>
-                            <ul  class="search_result">
-                                <li class="search_result_add danger_result">银行营业网点巡检任务</li>
-                                <li class="danger_level level02">二级</li>
-                                <li class="search_location" title="定位"></li>
-                                <li class="search_eddit" title="生命周期"></li>
-                                <li class="search_result_car car_personal">北京易华录科技有限公司</li>
-                                <li class="search_result_car car_time">中国银行北京营业网点</li>
-                            </ul>
-                            <ul  class="search_result">
-                                <li class="search_result_add danger_result">NVR故障</li>
-                                <li class="danger_level level03">三级</li>
-                                <li class="search_location" title="定位"></li>
-                                <li class="search_eddit" title="生命周期"></li>
-                                <li class="search_result_car car_personal">北京国双科技有限公司</li>
-                                <li class="search_result_car car_time">东城区国贸大厦</li>
-                            </ul>
-                            <ul  class="search_result">
-                                <li class="search_result_add danger_result">报警系统故障</li>
-                                <li class="danger_level level01">一级</li>
-                                <li class="search_location" title="定位"></li>
-                                <li class="search_eddit" title="生命周期"></li>
-                                <li class="search_result_car car_personal">北京安防维护维保公司</li>
-                                <li class="search_result_car car_time">地坛公园</li>
-                            </ul>
+                        <div class="search_sesult_box" id="chemical_search_result">
                         </div>
                         <!--翻页模块-->
                         <div class="chemistry_tcdPageCode"></div>
@@ -855,46 +715,10 @@
                                 <li class="search_title">统一社会信用代码：</li>
                                 <li class="search_input_box"><input class="search_input" type="text"></li>
                             </ul>
-                            <button class="search_btn">开始检索</button>
+                            <button class="search_btn" onclick="corporationsSearch()">开始检索</button>
                         </div>
                         <!--检索结果板块-->
-                        <div class="search_sesult_box">
-                            <ul  class="search_result">
-                                <li class="search_result_add">中国银行总部（350298100000405）</li>
-                                <li class="search_location" title="定位"></li>
-                                <li class="search_eddit" onclick="people()" title="操作"></li>
-                                <li class="search_result_road">北京市>西城区>复兴门内大街1号</li>
-                            </ul>
-                            <ul  class="search_result">
-                                <li class="search_result_add">北京邮电大学（260220100003523）</li>
-                                <li class="search_location" title="定位"></li>
-                                <li class="search_eddit" onclick="people()" title="操作"></li>
-                                <li class="search_result_road">北京市>海淀区>西土城路10号</li>
-                            </ul>
-                            <ul  class="search_result">
-                                <li class="search_result_add">中国石油（260220100003523）</li>
-                                <li class="search_location" title="定位"></li>
-                                <li class="search_eddit" onclick="people()" title="操作"></li>
-                                <li class="search_result_road">北京市>西城区>六铺炕</li>
-                            </ul>
-                            <ul  class="search_result">
-                                <li class="search_result_add">中国工商银行（350298100000405）</li>
-                                <li class="search_location" title="定位"></li>
-                                <li class="search_eddit" onclick="people()" title="操作"></li>
-                                <li class="search_result_road">北京市>西城区>复兴门内大街55号</li>
-                            </ul>
-                            <ul  class="search_result">
-                                <li class="search_result_add">北京金城安防科技有限公司（260220100003523）</li>
-                                <li class="search_location" title="定位"></li>
-                                <li class="search_eddit" onclick="people()" title="操作"></li>
-                                <li class="search_result_road">北京市>海淀区>莲花桥路55号</li>
-                            </ul>
-                            <ul  class="search_result">
-                                <li class="search_result_add">中国铝业集团有限公司（350298100000405）</li>
-                                <li class="search_location" title="定位"></li>
-                                <li class="search_eddit" onclick="people()" title="操作"></li>
-                                <li class="search_result_road">北京市>海淀区>西直门北大街62号</li>
-                            </ul>
+                        <div class="search_sesult_box" id="corporation_search_result">
                         </div>
                         <!--翻页模块-->
                         <div class="enterprise_tcdPageCode"></div>
@@ -915,52 +739,10 @@
                                 <li class="search_title">项目编号：</li>
                                 <li class="search_input_box"><input class="search_input" type="text"></li>
                             </ul>
-                            <button class="search_btn">检索</button>
+                            <button class="search_btn" onclick="workOrdersSearch()">检索</button>
                         </div>
                         <!--检索结果板块-->
-                        <div class="search_sesult_box">
-                            <ul  class="search_result">
-                                <li class="search_result_add">164号摄像机故障（陈浩）</li>
-                                <li class="search_location" title="定位"></li>
-                                <li class="search_guiji"  title="轨迹回放"></li>
-                                <li class="search_result_car car_personal">北京金城安防科技有限公司</li>
-                                <li class="search_result_car car_time">日月光鼎好大厦</li>
-                            </ul>
-                            <ul  class="search_result">
-                                <li class="search_result_add">报警系统故障（张正涛）</li>
-                                <li class="search_location" title="定位"></li>
-                                <li class="search_guiji" title="轨迹回放"></li>
-                                <li class="search_result_car car_personal">北京安防帮科技有限公司</li>
-                                <li class="search_result_car car_time">顺义物流园区</li>
-                            </ul>
-                            <ul  class="search_result">
-                                <li class="search_result_add">监视器故障（李雪）</li>
-                                <li class="search_location" title="定位"></li>
-                                <li class="search_guiji" title="轨迹回放"></li>
-                                <li class="search_result_car car_personal">北京安防维护公司</li>
-                                <li class="search_result_car car_time">中关村海龙大厦</li>
-                            </ul>
-                            <ul  class="search_result">
-                                <li class="search_result_add">银行营业网点巡检任务（刘红）</li>
-                                <li class="search_location" title="定位"></li>
-                                <li class="search_guiji" title="轨迹回放"></li>
-                                <li class="search_result_car car_personal">北京易华录科技有限公司</li>
-                                <li class="search_result_car car_time">中国银行北京营业网点</li>
-                            </ul>
-                            <ul  class="search_result">
-                                <li class="search_result_add">NVR故障（陈浩）</li>
-                                <li class="search_location" title="定位"></li>
-                                <li class="search_guiji" title="轨迹回放"></li>
-                                <li class="search_result_car car_personal">北京国双科技有限公司</li>
-                                <li class="search_result_car car_time">东城区国贸大厦</li>
-                            </ul>
-                            <ul  class="search_result">
-                                <li class="search_result_add">报警系统故障（张起国）</li>
-                                <li class="search_location" title="定位"></li>
-                                <li class="search_guiji" title="轨迹回放"></li>
-                                <li class="search_result_car car_personal">北京安防维护维保公司</li>
-                                <li class="search_result_car car_time">地坛公园</li>
-                            </ul>
+                        <div class="search_sesult_box" id="workOrders_search_result">
                         </div>
                         <!--翻页模块-->
                         <div class="car_tcdPageCode"></div>
@@ -1528,6 +1310,9 @@
 <script type="text/javascript" src="${base}/bigscreen/template3/js/jquery.pagination.js"></script>
 <script src="${base}/bigscreen/template3/js/bstable/js/bootstrap-table-zh-CN.min.js"></script>
 <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=5ieMMexWmzB9jivTq6oCRX9j&callback"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.js"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/library/GeoUtils/1.2/src/GeoUtils_min.js"></script>
+<link rel="stylesheet" href="//api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.css" />
 
 <script src="${base}/bigscreen/template3/js/MainMap.js"></script>
 <script src="${base}/bigscreen/template3/js/Home_page.js"></script>

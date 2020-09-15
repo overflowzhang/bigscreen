@@ -1,0 +1,32 @@
+[
+  {
+    "corporation":"中信银行海淀区支行",
+    "locationText": "北京市>海淀区>西土城路20号",
+    "latitude":116.404,
+    "longitude":39.915
+  },
+  {
+    "corporation":"中日友好医院",
+    "locationText": "北京市>朝阳区>樱花园东街2号",
+    "latitude":80.404,
+    "longitude":35.915
+  },
+  {
+    "corporation":"国家会议中心",
+    "locationText": "北京市>朝阳区>北辰西路8号院",
+    "latitude":76.404,
+    "longitude":30.915
+  },
+  {
+    "corporation":"北京邮电大学",
+    "locationText": "北京市>海淀区>西土城路10号",
+    "latitude":120.404,
+    "longitude":90.915
+  },
+  {
+    "corporation":"国家图书馆",
+    "locationText": "北京市>海淀区>中关村南大街33号",
+    "latitude":116.404,
+    "longitude":39.915
+  }
+]

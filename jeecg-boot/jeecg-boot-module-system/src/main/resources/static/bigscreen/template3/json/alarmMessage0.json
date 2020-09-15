@@ -1,0 +1,38 @@
+[
+  {
+    "type": "维修维保工单",
+    "level": "一级",
+    "dataTime": "19-12-5/12:52",
+    "corporation":"平安银行-海淀区支行",
+    "content": "海淀区西土城路9号，123号摄像机需要维修。",
+    "latitude":116.404,
+    "longitude":39.915
+  },
+  {
+    "type": "维修维保工单",
+    "level": "三级",
+    "dataTime": "19-12-2/9:22",
+    "corporation":"中信银行-朝阳支行",
+    "content": "朝阳区大望路23号，NVR工作不正常。",
+    "latitude":116.404,
+    "longitude":39.915
+  },
+  {
+    "type": "巡检任务工单",
+    "level": "二级",
+    "dataTime": "19-12-1/10:32",
+    "corporation":"中日友好医院",
+    "content": "医院全部安防设备及系统进行逐项化巡检。",
+    "latitude":116.404,
+    "longitude":39.915
+  },
+  {
+    "type": "巡检任务工单",
+    "level": "一级",
+    "dataTime": "19-12-6/8:32",
+    "corporation":"北师大三附中",
+    "content": "当前安防系统正常工作设备占比低，急需对全校安防设备及系统进行巡检。",
+    "latitude":116.404,
+    "longitude":39.915
+  }
+]
