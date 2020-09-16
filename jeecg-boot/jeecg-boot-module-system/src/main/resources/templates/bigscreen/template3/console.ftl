@@ -2,6 +2,7 @@
 <#assign base=springMacroRequestContext.getContextUrl("")>
 <html lang="en">
 <head>
+    <link href="${base}/bigscreen/template3/css/bmap_helper.css" rel="stylesheet" type="text/css" />
     <link href="${base}/bigscreen/template3/css/BigData.css" rel="stylesheet" type="text/css" />
     <link href="${base}/bigscreen/template3/css/index.css" rel="stylesheet" type="text/css" />
     <link href="${base}/bigscreen/template3/css/index01.css" rel="stylesheet" type="text/css" />
@@ -123,7 +124,7 @@
                                 <div class="map_title">工单动态实时地图</div>
                             </div>
                         </div>
-                        <div class="map" id="map"  ></div>
+                        <div class="map" id="bmapContainer"  ></div>
                         <!--地图显示信息选择-->
                         <div class="display_type_box display_box" style="display: none;overflow:auto">
                             <div class="display_type_center_box">
@@ -1303,6 +1304,8 @@
     </div>
 </div>
 
+<script type="text/javascript" src="${base}/bigscreen/template3/js/bmap_helper.js"></script>
+<script type="text/javascript" src="${base}/bigscreen/template3/js/bmap_theme.js"></script>
 <script src="${base}/bigscreen/template3/js/echarts-all.js"></script>
 <script src="${base}/bigscreen/template3/js/index.js"></script>
 <script src="${base}/bigscreen/template3/js/bstable/js/bootstrap.min.js"></script>
@@ -1744,7 +1747,7 @@
 </script>
 <script>
     // 百度地图API功能
-    var map = new BMap.Map("map");    // 创建Map实例
+    var map = new BMap.Map("bmapContainer");    // 创建Map实例
     map.centerAndZoom(new BMap.Point(116.404, 39.915), 11);  // 初始化地图,设置中心点坐标和地图级别
     //添加地图类型控件
     map.addControl(new BMap.MapTypeControl({
@@ -1758,6 +1761,14 @@
     map.setMapStyle(mapStyle);
     map.setCurrentCity("北京");          // 设置地图显示的城市 此项是必须设置的
     map.enableScrollWheelZoom(true);
+
+    // 初始化插件
+    var helper = BMapHelper.initHelper({
+        map: map,
+        imgPath: '${base}/bigscreen/template3/img/'
+    });
+    // 全屏
+    helper.setFullControl();
 </script>
 
 </body>
