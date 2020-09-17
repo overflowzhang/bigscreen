@@ -349,14 +349,96 @@ function flashRoute() {
 
 //全图
 function zoomFull() {
-    require(["esri/geometry/Point"], function (Point) {
-        var pt = new Point({
-            x: 102.1750010681153,
-            y: 29.958719635009814,
-            spatialReference: map.spatialReference
-        });
-        map.centerAndZoom(pt, 5);
-    });
+    data = {isAutoCenter: true};
+    var that = this;
+    map.enableAutoResize();
+    var FullControl = function () {
+        // 默认停靠位置和偏移量
+        this.defaultAnchor = data.anchor || BMAP_ANCHOR_BOTTOM_RIGHT;
+        if (data.offset && data.offset.x && data.offset.y) {
+            this.defaultOffset = new BMap.Size(+data.offset.x, +data.offset.y);
+        } else {
+            this.defaultOffset = new BMap.Size(20, 81);
+        }
+    };
+
+    FullControl.prototype = new BMap.Control();
+    FullControl.prototype.initialize = function(map) {
+        var mapEl = map.getContainer();
+        var fullDiv = document.createElement('div');
+        var fullDivHtml = '';
+        var unfullDivHtml = '';
+
+        if (data.divHtml && Array.isArray(data.divHtml) && data.divHtml.length === 2) {
+            fullDivHtml = data.divHtml[0].toString();
+            unfullDivHtml = data.divHtml[1].toString();
+        } else {
+            fullDivHtml =
+                '<div class="bmap-ctrl bmap-full">' +
+                '<img src=' + 'http://127.0.0.1:8081/jeecg-boot/bigscreen/template3/img/full.png' + ' title="全屏"/>' +
+                '</div>';
+            unfullDivHtml =
+                '<div class="bmap-ctrl bmap-full">' +
+                '<img src=' + 'http://127.0.0.1:8081/jeecg-boot/bigscreen/template3/img/unfull.png' + ' title="恢复"/>' +
+                '</div>';
+        }
+        fullDiv.innerHTML = fullDivHtml;
+        fullDiv.setAttribute('state', '0'); // 默认关闭全屏
+        fullDiv.onclick = function(e) {
+            // 为 map 对象添加一个新属性，记录初始化中心点
+            if (!map.fullCenter) {
+                map.fullCenter = map.getCenter();
+            }
+
+            var isToFull = (+fullDiv.getAttribute('state') === 0) ? true : false;
+            map.enableAutoResize();
+
+            // 通过添加样式，来更改地图的宽高达到全屏
+            var fullCls = ' bmap-fullScreen';
+            var cls = document.body.className;
+            if (isToFull) {
+                if (cls.indexOf(fullCls) === -1) {
+                    document.body.className = cls + fullCls;
+                }
+            } else {
+                document.body.className = cls.replace(fullCls, '');
+            }
+
+            // 更改按钮
+            fullDiv.innerHTML = isToFull ? unfullDivHtml : fullDivHtml;
+            fullDiv.setAttribute('state', isToFull ? '1' : '0');
+
+            // 监听百度内置的地图蒙版的尺寸变化，知道其变化完毕后再重新定位中心点
+            var mapMask = mapEl.getElementsByClassName('BMap_mask')[0];
+            if (data.isAutoCenter && map.fullCenter && mapMask) {
+                autoCenter();
+            }
+
+            function autoCenter() {
+                var firstHeight = mapMask.getBoundingClientRect().height;
+                var secondHeight;
+                setTimeout(() => {
+                    secondHeight = mapMask.getBoundingClientRect().height;
+                    // 如地图没有重排完，则延迟重试
+                    if (firstHeight !== secondHeight) {
+                        setTimeout(() => {
+                            autoCenter();
+                        }, 200);
+                    } else {
+                        map.panTo(map.fullCenter);
+                        // 回调函数
+                        if (data.callback && typeof data.callback === 'function') {
+                            data.callback(isToFull);
+                        }
+                    }
+                }, 100);
+            }
+        };
+        mapEl.appendChild(fullDiv);
+        return fullDiv;
+    };
+    var fullCtrl = new FullControl();
+    map.addControl(fullCtrl);
 }
 
 //放大
@@ -564,7 +646,7 @@ function keyNameSearch(){
     //创建检索信息窗口对象
     var searchInfoWindow = null;
     searchInfoWindow = new BMapLib.SearchInfoWindow(map, content, {
-        title  : "百度大厦",      //标题
+        title  : "北京安防协会",      //标题
         width  : 290,             //宽度
         height : 105,              //高度
         panel  : "panel",         //检索结果面板
