@@ -3,6 +3,21 @@
  */
 var buyTimeUpdatex=['1', '2', '3', '4', '5', '6', '7']
 var buyTimeUpdatey=[120, 132, 101, 146, 199, 230, 150]
+var failureFactorData=[]
+var faultTypeData=[]
+var orderRepairData=[]
+var repairOrderX=[]
+var repairOrderY=[]
+var climateOrderData=[]
+var orderEngineerData=[]
+var orderIndustryData=[]
+var activityOrderData=[]
+
+var IncomeIndustryData=[]
+var ProjectNumberData=[]
+var IncomeCompositionData=[]
+var CostCompositionData=[]
+var IncomeAndCostData=[]
 $(document).ready(function(){
     // 第二个(维保工单分析)页面 websocket连接与收数据部分
     console.log('建立连接2...');
@@ -26,41 +41,61 @@ $(document).ready(function(){
         // 将 string 转化为 JSON
         var data = JSON.parse(e.data)
         // 巡检工单趋势 echarts
-        var content1 = data['content1']
-        buyTimeUpdatey = content1['data']
-        buyTimeUpdater(buyTimeUpdatex,buyTimeUpdatey);
+        var content = data['content']
+        if(data['type']=='巡检工单趋势'){
+            buyTimeUpdatex=content['dataX']
+            buyTimeUpdatey=content['dataY']
+            buyTimeUpdater(buyTimeUpdatex,buyTimeUpdatey);
+        }
 
         // 故障因素分析 echarts
-        var content2 = data['content2']
-        failureFactor(content2)
+        if(data['type']=='故障因素分析'){
+            failureFactorData=content
+            failureFactor(failureFactorData)
+        }
 
         // 故障类型分析 echarts
-        var content3 = data['content3']
-        faultType(content3)
+        if(data['type']=='故障类型分析'){
+            faultTypeData=content
+            faultType(faultTypeData)
+        }
 
         // 工单修复数 echarts
-        var content4 = data['content4']
-        orderRepair(content4)
+        if(data['type']=='工单修复数'){
+            orderRepairData=content
+            orderRepair(orderRepairData)
+        }
 
         // 维修工单趋势 echarts
-        var content5 = data['content5']
-        repairOrder(content5['data'])
+        if(data['type']=='维修工单趋势'){
+            repairOrderX=content['dataX']
+            repairOrderY=content['dataY']
+            repairOrder(repairOrderX,repairOrderY)
+        }
 
         // 气候与工单量分析 echarts
-        var content6 = data['content6']
-        climateOrder(content6)
+        if(data['type']=='气候与工单量分析'){
+            climateOrderData=content
+            climateOrder(climateOrderData)
+        }
 
         // 工单完成量与工程师分析 echarts
-        var content7 = data['content7']
-        orderEngineer(content7)
+        if(data['type']=='工单完成量与工程师分析'){
+            orderEngineerData=content
+            orderEngineer(orderEngineerData)
+        }
 
         // 巡检工单行业分析 echarts
-        var content8 = data['content8']
-        orderIndustry(content8)
+        if(data['type']=='巡检工单行业分析'){
+            orderIndustryData=content
+            orderIndustry(orderIndustryData)
+        }
 
         // 平台活动与行业分析 echarts
-        var content9 = data['content9']
-        activityOrder(content9)
+        if(data['type']=='平台活动与工单量分析'){
+            activityOrderData=content
+            activityOrder(activityOrderData)
+        }
 
         // var secondaryRepair     // 工单二次维修数分析
     }
@@ -90,20 +125,31 @@ $(document).ready(function(){
         var data = JSON.parse(e.data)
 
         // 收入行业分析 echarts
-        var content1 = data['content1']
-        IncomeIndustry(content1)
+        var content = data['content']
+        if(data['type']=='收入行业分析'){
+            IncomeIndustryData=content
+            IncomeIndustry(IncomeIndustryData)
+        }
         // 项目数量分析 echarts
-        var content2 = data['content2']
-        ProjectNumber(content2)
+        if(data['type']=='项目数量分析'){
+            ProjectNumberData=content
+            ProjectNumber(ProjectNumberData)
+        }
         // 收入总额组成 echarts
-        var content3 = data['content3']
-        IncomeComposition(content3)
+        if(data['type']=='收入总额组成'){
+            IncomeCompositionData=content
+            IncomeComposition(IncomeCompositionData)
+        }
         // 成本总额组成 echarts
-        var content4 = data['content4']
-        CostComposition(content4)
+        if(data['type']=='成本总额组成'){
+            CostCompositionData=content
+            CostComposition(CostCompositionData)
+        }
         // 收入总额与成本总额 echarts
-        var content5 = data['content5']
-        IncomeAndCost(content5)
+        if(data['type']=='收入总额与成本总额'){
+            IncomeAndCostData=content
+            IncomeAndCost(IncomeAndCostData)
+        }
     }
 
     // 第四个(维保工程师分析)页面 websocket连接与收数据部分
@@ -166,8 +212,8 @@ $(document).ready(function(){
 
     // 第五个(终端客户分析)页面 websocket连接与收数据部分
     console.log('建立连接5...');
-    var websocket4 = new WebSocket("ws://127.0.0.1:8990/ws");
-    websocket4.onopen = function(e) {
+    var websocket5 = new WebSocket("ws://127.0.0.1:8990/ws");
+    websocket5.onopen = function(e) {
         console.log('完成注册');
         var msg = {
             'content': '创建连接',
@@ -2217,7 +2263,7 @@ function yingXiao(){
         myChart.setOption(option);
     });
 // 维修工单趋势
-    $(repairOrder=function(dataa){
+    $(repairOrder=function(dataX,dataY){
         console.log('维修工单趋势...')
         var myChart = echarts.init($("#bookBmonth")[0]);
         var option = {
@@ -2243,7 +2289,7 @@ function yingXiao(){
                 {
                     type: 'category',
                     boundaryGap: false,
-                    data : ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
+                    data : dataX,
                     splitLine: {
                         show: false
                     },
@@ -2277,7 +2323,7 @@ function yingXiao(){
                     name: '',
                     type: 'line',
                     stack: '已修复数',
-                    data:dataa,
+                    data:dataY,
                     itemStyle: {
                         normal: {
                             color: '#02bcbc'

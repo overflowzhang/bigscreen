@@ -7,8 +7,7 @@
 <script>
   import Vue from 'vue'
   import { ACCESS_TOKEN } from "@/store/mutation-types"
-  import PageLayout from '../page/PageLayout'
-  import RouteView from './RouteView'
+  
 
   export default {
     name: "IframePageContent",
@@ -36,7 +35,7 @@
         let id = this.$route.path
         this.id = id
         //url = "http://www.baidu.com"
-        console.log("------url------"+url)
+        console.log("------url+++------"+url)
         if (url !== null && url !== undefined) {
           this.url = url;
           /*update_begin author:wuxianquan date:20190908 for:判断打开方式，新窗口打开时this.$route.meta.internalOrExternal==true */
