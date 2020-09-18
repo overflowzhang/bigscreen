@@ -1498,7 +1498,7 @@
                     field: 'load',
                     align: 'center',
                     formatter: function (value, row) {
-                        var e = '<a  href="javascript:void(0)" title="" onclick="showCarDetai()">查看详情</a> ';
+                        var e = '<a  href="javascript:void(0)" title="" onclick="showCarDetai(value)">查看详情</a> ';
                         var d = '<a  href="javascript:void(0)" title="" onclick="analiysis(\'' + row.id + '\')">公司位置</a> ';
                         return e + d;
                     }
@@ -1679,6 +1679,10 @@
         myChart.setOption(option);
     }
 
+    // 页面跳转 -> 查看详情
+    function showCarDetai(value) {
+        window.open('https://aiqicha.baidu.com/s?q=阿里巴巴')
+    }
 
     function TimeControl(){
         $(".message_scroll_box").animate({marginTop:96},800,
