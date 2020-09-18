@@ -12,12 +12,42 @@ var climateOrderData=[]
 var orderEngineerData=[]
 var orderIndustryData=[]
 var activityOrderData=[]
+var secondaryRepairData=[]
 
 var IncomeIndustryData=[]
 var ProjectNumberData=[]
 var IncomeCompositionData=[]
 var CostCompositionData=[]
 var IncomeAndCostData=[]
+
+var genderRatioData = []
+var majorRatioData = []
+var ageRatioData = []
+var professionNumberData = []
+var orderRankData = []
+var monthOnlineData = []
+var notCompleteData = []
+var monthCompletionNumData = []
+var monthTotalRankData = []
+var failureCauseData = []
+var faultHandData = []
+
+var customerTypeData = []
+var customerAreaData = []
+var customerIndustryData = []
+var monthActiveCustomerData = []
+var customerOnlineData = []
+var totalMonthCustomerData = []
+var classifiedCustomerData = []
+var customerPreferenceTypeData = []
+var industryActiveCustomerData = []
+var weatherAndActiveCustomerData = []
+
+var activeProviderData = []
+var providerAndOderTypeData = []
+var providerIndustryInterestData = []
+var providerAttentionIndustryData = []
+
 $(document).ready(function(){
     // 第二个(维保工单分析)页面 websocket连接与收数据部分
     console.log('建立连接2...');
@@ -97,7 +127,11 @@ $(document).ready(function(){
             activityOrder(activityOrderData)
         }
 
-        // var secondaryRepair     // 工单二次维修数分析
+        // 工单二次维修数分析 echarts
+        if (data['type'] == '工单二次维修数分析') {
+            secondaryRepairData = content
+            secondaryRepair(secondaryRepairData)
+        }
     }
 
 
@@ -126,6 +160,8 @@ $(document).ready(function(){
 
         // 收入行业分析 echarts
         var content = data['content']
+
+        console.log("==================" + data['type'] +"=======================")
         if(data['type']=='收入行业分析'){
             IncomeIndustryData=content
             IncomeIndustry(IncomeIndustryData)
@@ -174,40 +210,63 @@ $(document).ready(function(){
         // 提供动态更新echarts的方式：
         // 将 string 转化为 JSON
         var data = JSON.parse(e.data)
+        var content = data['content']
         // 工程师性别占比
-        var content1 = data['content1']
-        GenderRatio(content1)
+        if (data['type'] == '工程师性别占比') {
+            console.log("=====================工程师性别占比==========================")
+            genderRatioData = content
+            GenderRatio(genderRatioData)
+        }
         // 工程师专业占比
-        var content2 = data['content2']
-        MajorRatio(content2)
+        if (data['type'] == '工程师专业占比') {
+            majorRatioData = content
+            MajorRatio(majorRatioData)
+        }
         // 工程师年龄段占比
-        var content3 = data['content3']
-        AgeRatio(content3)
+        if (data['type'] == '工程师年龄段占比') {
+            ageRatioData = content
+            AgeRatio(ageRatioData)
+        }
         // 各专业活跃工程师数量情况
-        var content4 = data['content4']
-        ProfessionNumber(content4)
+        if (data['type'] == '各专业活跃工程师数量情况') {
+            professionNumberData = content
+            ProfessionNumber(professionNumberData)
+        }
         // 工单完成率排名
-        var content5 = data['content5']
-        OrderRank(content5)
+        if (data['type'] == '工单完成率排名') {
+            orderRankData = content
+            OrderRank(orderRankData)
+        }
         // 月在线工程师数量
-        var content6 = data['content6']
-        MonthOnline(content6)
+        if (data['type'] == '月在线工程师数量') {
+            monthOnlineData = content
+            MonthOnline(monthOnlineData)
+        }
         // 未按时完成工单数量情况
-        var content7 = data['content7']
-        NotComplete(content7)
+        if (data['type'] == '未按时完成工单数量情况') {
+            notCompleteData = content
+            NotComplete(notCompleteData)
+        }
         // 月工单完成情况工程师数量分析
-        var content8 = data['content8']
-        MonthCompletionNum(content8)
+        if (data['type'] == '月工单完成情况工程师数量分析') {
+            monthCompletionNumData = content
+            MonthCompletionNum(monthCompletionNumData)
+        }
         // 月工单处理总量前7名工程师分析
-        var content9 = data['content9']
-        MonthTotalRank(content9)
+        if (data['type'] == '月工单处理总量前7名工程师分析') {
+            monthTotalRankData = content
+            MonthTotalRank(monthTotalRankData)
+        }
         // 故障原因分析
-        var content10 = data['content10']
-        FailureCause(content10)
+        if (data['type'] == '故障原因分析') {
+            failureCauseData = content
+            FailureCause(failureCauseData)
+        }
         // 故障处理情况
-        var content11 = data['content11']
-        FaultHand(content11)
-
+        if (data['type'] == '故障处理情况') {
+            faultHandData = content
+            FaultHand(faultHandData)
+        }
     }
 
     // 第五个(终端客户分析)页面 websocket连接与收数据部分
@@ -232,47 +291,66 @@ $(document).ready(function(){
         // 提供动态更新echarts的方式：
         // 将 string 转化为 JSON
         var data = JSON.parse(e.data)
-
+        var content = data['content']
         // 客户类型分析 echarts
-        var content1 = data['content1']
-        CustomerType(content1)
+        if (data['type'] == '客户类型分析') {
+            customerTypeData = content
+            CustomerType(customerTypeData)
+        }
 
         // 客户区域分析 echarts
-        var content2 = data['content2']
-        CustomerArea(content2)
+        if (data['type'] == '客户区域分析') {
+            customerAreaData = content
+            CustomerArea(customerAreaData)
+        }
 
         // 客户行业分析 echarts
-        var content3 = data['content3']
-        CustomerIndustry(content3)
+        if (data['type'] == '客户行业分析') {
+            customerIndustryData = content
+            CustomerIndustry(customerIndustryData)
+        }
 
         // 月活跃客户数据分析 echarts
-        var content4 = data['content4']
-        MonthActiveCustomer(content4)
+        if (data['type'] == '月活跃客户数据分析') {
+            monthActiveCustomerData = content
+            MonthActiveCustomer(monthActiveCustomerData)
+        }
 
         // 当日客户在线情况 echarts
-        var content5 = data['content5']
-        CustomerOnline(content5)
+        if (data['type'] == '当日客户在线情况') {
+            customerOnlineData = content
+            CustomerOnline(customerOnlineData)
+        }
 
         // 月客户总数分析 echarts
-        var content6 = data['content6']
-        TotalMonthCustomer(content6)
+        if (data['type'] == '月客户总数分析') {
+            totalMonthCustomerData = content
+            TotalMonthCustomer(totalMonthCustomerData)
+        }
 
         // 分类客户趋势分析 echarts
-        var content7 = data['content7']
-        ClassifiedCustomer(content7)
+        if (data['type'] == '分类客户趋势分析') {
+            classifiedCustomerData = content
+            ClassifiedCustomer(classifiedCustomerData)
+        }
 
         // 客户倾向性类型分析 echarts
-        var content8 = data['content8']
-        CustomerPreferenceType(content8)
+        if (data['type'] == '客户倾向性类型分析') {
+            customerPreferenceTypeData = content
+            CustomerPreferenceType(customerPreferenceTypeData)
+        }
 
         // 行业活跃客户数 echarts
-        var content9 = data['content9']
-        IndustryActiveCustomer(content9)
+        if (data['type'] == '行业活跃客户数') {
+            industryActiveCustomerData = content
+            IndustryActiveCustomer(industryActiveCustomerData)
+        }
 
         // 天气与活跃客户数分析 echarts
-        var content10 = data['content10']
-        WeatherAndActiveCustomer(content10)
-
+        if (data['type'] == '天气与活跃客户数分析') {
+            weatherAndActiveCustomerData = content
+            WeatherAndActiveCustomer(weatherAndActiveCustomerData)
+        }
     }
 
     // 第六个(服务商信息分析)页面 websocket连接与收数据部分
@@ -297,19 +375,30 @@ $(document).ready(function(){
         // 提供动态更新echarts的方式：
         // 将 string 转化为 JSON
         var data = JSON.parse(e.data)
-
+        var content = data['content']
         // 活跃服务商趋势分析
-        var content1 = data['content1']
-        ActiveProvider(content1)
+        if (data['type'] == '活跃服务商趋势分析') {
+            activeProviderData = content
+            ActiveProvider(activeProviderData)
+        }
+
         // 服务商与工单类型倾向分析
-        var content2 = data['content2']
-        ProviderAndOderType(content2)
+        if (data['type'] == '服务商与工单类型倾向分析') {
+            providerAndOderTypeData = content
+            ProviderAndOderType(providerAndOderTypeData)
+        }
+
         // 服务商对行业兴趣分析
-        var content3 = data['content3']
-        ProviderIndustryInterest(content3)
+        if (data['type'] == '服务商对行业兴趣分析') {
+            providerIndustryInterestData = content
+            ProviderIndustryInterest(providerIndustryInterestData)
+        }
+
         // 前24家服务商关注行业分析
-        var content4 = data['content4']
-        ProviderAttentionIndustry(content4)
+        if (data['type'] == '前24家服务商关注行业分析') {
+            providerAttentionIndustryData = content
+            ProviderAttentionIndustry(providerAttentionIndustryData)
+        }
     }
 })
 $(function(){
@@ -2825,7 +2914,7 @@ function yingXiao(){
         myChart.setOption(option);
     });
 // 工单二次维修数分析
-    $(function(){
+    $(secondaryRepair=function(dataa){
         var myChart = echarts.init($("#sperceBook01")[0]);
         option = {
 
@@ -2869,26 +2958,7 @@ function yingXiao(){
                     boundaryGap : true,
                     axisTick: {onGap:false},
                     splitLine: {show:false},
-                    data : [
-                        "2013/1/24", "2013/1/25", "2013/1/28", "2013/1/29", "2013/1/30",
-                        "2013/1/31", "2013/2/1", "2013/2/4", "2013/2/5", "2013/2/6",
-                        "2013/2/7", "2013/2/8", "2013/2/18", "2013/2/19", "2013/2/20",
-                        "2013/2/21", "2013/2/22", "2013/2/25", "2013/2/26", "2013/2/27",
-                        "2013/2/28", "2013/3/1", "2013/3/4", "2013/3/5", "2013/3/6",
-                        "2013/3/7", "2013/3/8", "2013/3/11", "2013/3/12", "2013/3/13",
-                        "2013/3/14", "2013/3/15", "2013/3/18", "2013/3/19", "2013/3/20",
-                        "2013/3/21", "2013/3/22", "2013/3/25", "2013/3/26", "2013/3/27",
-                        "2013/3/28", "2013/3/29", "2013/4/1", "2013/4/2", "2013/4/3",
-                        "2013/4/8", "2013/4/9", "2013/4/10", "2013/4/11", "2013/4/12",
-                        "2013/4/15", "2013/4/16", "2013/4/17", "2013/4/18", "2013/4/19",
-                        "2013/4/22", "2013/4/23", "2013/4/24", "2013/4/25", "2013/4/26",
-                        "2013/5/2", "2013/5/3", "2013/5/6", "2013/5/7", "2013/5/8",
-                        "2013/5/9", "2013/5/10", "2013/5/13", "2013/5/14", "2013/5/15",
-                        "2013/5/16", "2013/5/17", "2013/5/20", "2013/5/21", "2013/5/22",
-                        "2013/5/23", "2013/5/24", "2013/5/27", "2013/5/28", "2013/5/29",
-                        "2013/5/30", "2013/5/31", "2013/6/3", "2013/6/4", "2013/6/5",
-                        "2013/6/6", "2013/6/7", "2013/6/13"
-                    ]
+                    data : dataa['date']
                 }
             ],
             yAxis : [
@@ -2909,96 +2979,7 @@ function yingXiao(){
                 {
                     name:'二次维修数',
                     type:'k',
-                    data:[ // 开盘，收盘，最低，最高
-                        [2320.26,2302.6,2287.3,2362.94],
-                        [2300,2291.3,2288.26,2308.38],
-                        [2295.35,2346.5,2295.35,2346.92],
-                        [2347.22,2358.98,2337.35,2363.8],
-                        [2360.75,2382.48,2347.89,2383.76],
-                        [2383.43,2385.42,2371.23,2391.82],
-                        [2377.41,2419.02,2369.57,2421.15],
-                        [2425.92,2428.15,2417.58,2440.38],
-                        [2411,2433.13,2403.3,2437.42],
-                        [2432.68,2434.48,2427.7,2441.73],
-                        [2430.69,2418.53,2394.22,2433.89],
-                        [2416.62,2432.4,2414.4,2443.03],
-                        [2441.91,2421.56,2415.43,2444.8],
-                        [2420.26,2382.91,2373.53,2427.07],
-                        [2383.49,2397.18,2370.61,2397.94],
-                        [2378.82,2325.95,2309.17,2378.82],
-                        [2322.94,2314.16,2308.76,2330.88],
-                        [2320.62,2325.82,2315.01,2338.78],
-                        [2313.74,2293.34,2289.89,2340.71],
-                        [2297.77,2313.22,2292.03,2324.63],
-                        [2322.32,2365.59,2308.92,2366.16],
-                        [2364.54,2359.51,2330.86,2369.65],
-                        [2332.08,2273.4,2259.25,2333.54],
-                        [2274.81,2326.31,2270.1,2328.14],
-                        [2333.61,2347.18,2321.6,2351.44],
-                        [2340.44,2324.29,2304.27,2352.02],
-                        [2326.42,2318.61,2314.59,2333.67],
-                        [2314.68,2310.59,2296.58,2320.96],
-                        [2309.16,2286.6,2264.83,2333.29],
-                        [2282.17,2263.97,2253.25,2286.33],
-                        [2255.77,2270.28,2253.31,2276.22],
-                        [2269.31,2278.4,2250,2312.08],
-                        [2267.29,2240.02,2239.21,2276.05],
-                        [2244.26,2257.43,2232.02,2261.31],
-                        [2257.74,2317.37,2257.42,2317.86],
-                        [2318.21,2324.24,2311.6,2330.81],
-                        [2321.4,2328.28,2314.97,2332],
-                        [2334.74,2326.72,2319.91,2344.89],
-                        [2318.58,2297.67,2281.12,2319.99],
-                        [2299.38,2301.26,2289,2323.48],
-                        [2273.55,2236.3,2232.91,2273.55],
-                        [2238.49,2236.62,2228.81,2246.87],
-                        [2229.46,2234.4,2227.31,2243.95],
-                        [2234.9,2227.74,2220.44,2253.42],
-                        [2232.69,2225.29,2217.25,2241.34],
-                        [2196.24,2211.59,2180.67,2212.59],
-                        [2215.47,2225.77,2215.47,2234.73],
-                        [2224.93,2226.13,2212.56,2233.04],
-                        [2236.98,2219.55,2217.26,2242.48],
-                        [2218.09,2206.78,2204.44,2226.26],
-                        [2199.91,2181.94,2177.39,2204.99],
-                        [2169.63,2194.85,2165.78,2196.43],
-                        [2195.03,2193.8,2178.47,2197.51],
-                        [2181.82,2197.6,2175.44,2206.03],
-                        [2201.12,2244.64,2200.58,2250.11],
-                        [2236.4,2242.17,2232.26,2245.12],
-                        [2242.62,2184.54,2182.81,2242.62],
-                        [2187.35,2218.32,2184.11,2226.12],
-                        [2213.19,2199.31,2191.85,2224.63],
-                        [2203.89,2177.91,2173.86,2210.58],
-                        [2170.78,2174.12,2161.14,2179.65],
-                        [2179.05,2205.5,2179.05,2222.81],
-                        [2212.5,2231.17,2212.5,2236.07],
-                        [2227.86,2235.57,2219.44,2240.26],
-                        [2242.39,2246.3,2235.42,2255.21],
-                        [2246.96,2232.97,2221.38,2247.86],
-                        [2228.82,2246.83,2225.81,2247.67],
-                        [2247.68,2241.92,2231.36,2250.85],
-                        [2238.9,2217.01,2205.87,2239.93],
-                        [2217.09,2224.8,2213.58,2225.19],
-                        [2221.34,2251.81,2210.77,2252.87],
-                        [2249.81,2282.87,2248.41,2288.09],
-                        [2286.33,2299.99,2281.9,2309.39],
-                        [2297.11,2305.11,2290.12,2305.3],
-                        [2303.75,2302.4,2292.43,2314.18],
-                        [2293.81,2275.67,2274.1,2304.95],
-                        [2281.45,2288.53,2270.25,2292.59],
-                        [2286.66,2293.08,2283.94,2301.7],
-                        [2293.4,2321.32,2281.47,2322.1],
-                        [2323.54,2324.02,2321.17,2334.33],
-                        [2316.25,2317.75,2310.49,2325.72],
-                        [2320.74,2300.59,2299.37,2325.53],
-                        [2300.21,2299.25,2294.11,2313.43],
-                        [2297.1,2272.42,2264.76,2297.1],
-                        [2270.71,2270.93,2260.87,2276.86],
-                        [2264.43,2242.11,2240.07,2266.69],
-                        [2242.26,2210.9,2205.07,2250.63],
-                        [2190.1,2148.35,2126.22,2190.1]
-                    ]
+                    data:dataa['二次维修数']
                 }
             ]
         };
