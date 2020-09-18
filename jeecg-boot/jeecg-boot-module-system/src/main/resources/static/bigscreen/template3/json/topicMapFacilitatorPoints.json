@@ -1,0 +1,42 @@
+[
+  {
+    "topic": "银行",
+    "latitude":116.204,
+    "longitude":39.815,
+    "facilitatorName":"中国通信建设集团有限公司",
+    "facilitatorAddress": "丰台区方庄南路甲56号",
+    "phoneNumber": 18828439738
+  },
+  {
+    "topic": "银行",
+    "latitude":116.304,
+    "longitude":39.715,
+    "facilitatorName":"北京金城安防科技有限公司",
+    "facilitatorAddress": "丰台区方庄南路甲56号",
+    "phoneNumber": 18828439738
+  },
+  {
+    "topic": "银行",
+    "latitude":116.104,
+    "longitude":39.415,
+    "facilitatorName":"北京电气化工程有限公司",
+    "facilitatorAddress": "丰台区方庄南路甲56号",
+    "phoneNumber": 18828439738
+  },
+  {
+    "topic": "银行",
+    "latitude":115.404,
+    "longitude":38.915,
+    "facilitatorName":"北京易华录网络科技有限公司",
+    "facilitatorAddress": "丰台区方庄南路甲56号",
+    "phoneNumber": 18828439738
+  },
+  {
+    "topic": "银行",
+    "latitude":116.404,
+    "longitude":41.915,
+    "facilitatorName":"北京易华录网络科技有限公司",
+    "facilitatorAddress": "丰台区方庄南路甲56号",
+    "phoneNumber": 18828439738
+  }
+]

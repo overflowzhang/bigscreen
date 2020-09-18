@@ -614,7 +614,7 @@ function workOrdersSearch() {
                 modelView=modelView+'<ul  class="search_result">'+
                     '<li class="search_result_add">'+data[i].content+'</li>'+
                     '<li class="search_location" title="定位" onclick="taskLocation('+data[i].latitude+','+data[i].longitude+')"'+'></li>'+
-                    '<li class="search_guiji" title="轨迹回放"'+'></li>'+
+                    '<li class="search_guiji" title="轨迹回放" onclick="workOrderRoute('+data[i].id+')"'+'></li>'+
                     '<li class="search_result_car car_personal">'+data[i].corporation+'</li>'+
                     '<li class="search_result_car car_time">'+data[i].locationText+'</li>'+
                     '</ul>'
@@ -628,6 +628,55 @@ function workOrdersSearch() {
         //     <li class="search_result_car car_personal">北京金城安防科技有限公司</li>
         //     <li class="search_result_car car_time">日月光鼎好大厦</li>
         // </ul>
+        }
+    })
+}
+function workOrderRoute(workOrderId) {
+    $.ajax({
+        url:'api/workOrderRoute',
+        type:'GET',
+        data:{
+            'workOrderId':'as'
+        },
+        success:function(dataStr){
+            var data=JSON.parse(dataStr)
+            var myP1 = new BMap.Point(data[0].latitude,data[0].longitude);    //起点
+            var myP2 = new BMap.Point(data[1].latitude,data[1].longitude);    //终点
+            var myIcon = new BMap.Icon("../../img/route.png", new BMap.Size(32, 70), {    //小车图片
+                //offset: new BMap.Size(0, -5),    //相当于CSS精灵
+                imageOffset: new BMap.Size(0, 0)    //图片的偏移量。为了是图片底部中心对准坐标点。
+            });
+            var driving2 = new BMap.DrivingRoute(map, {renderOptions:{map: map, autoViewport: true}});    //驾车实例
+            driving2.search(myP1, myP2);    //显示一条公交线路
+
+            window.run = function (){
+                var driving = new BMap.DrivingRoute(map);    //驾车实例
+                driving.search(myP1, myP2);
+                driving.setSearchCompleteCallback(function(){
+                    var pts = driving.getResults().getPlan(0).getRoute(0).getPath();    //通过驾车实例，获得一系列点的数组
+                    var paths = pts.length;    //获得有几个点
+
+                    var carMk = new BMap.Marker(pts[0],{icon:myIcon});
+                    map.addOverlay(carMk);
+                    i=0;
+                    function resetMkPoint(i){
+                        carMk.setPosition(pts[i]);
+                        if(i < paths){
+                            setTimeout(function(){
+                                i++;
+                                resetMkPoint(i);
+                            },100);
+                        }
+                    }
+                    setTimeout(function(){
+                        resetMkPoint(5);
+                    },100)
+
+                });
+            }
+            setTimeout(function(){
+                run();
+            },1500);
         }
     })
 }

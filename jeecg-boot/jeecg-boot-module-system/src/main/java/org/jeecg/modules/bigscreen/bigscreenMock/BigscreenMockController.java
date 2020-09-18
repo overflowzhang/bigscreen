@@ -50,6 +50,14 @@ public class BigscreenMockController {
 	public String activeFacilitatorList(@RequestParam(name = "pageNo", defaultValue = "0") Integer pageNo, @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,@RequestParam(name = "level") String level) {
 		return readJson(JSON_PATH+"/activeFacilitatorList"+pageNo+".json");
 	}
+	@GetMapping(value = "/topicMapFacilitatorPoints")
+	public String topicMapFacilitatorPoints(@RequestParam(name = "city") String city) {
+		return readJson(JSON_PATH+"/topicMapFacilitatorPoints.json");
+	}
+	@GetMapping(value = "/workOrderRoute")
+	public String workOrderRoute(@RequestParam(name = "workOrderId") String workOrderId) {
+		return readJson(JSON_PATH+"/workOrderRoute.json");
+	}
 	
 	/**
 	 * 读取json格式文件
