@@ -7,6 +7,7 @@ import org.jeecg.common.api.vo.OaWpsModel;
  * @Author: wangshuai
  * @Date:20200709
  * @Version:V1.0
+ * // ************
  */
 public interface IWpsBaseAPI {
 
